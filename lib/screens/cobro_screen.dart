@@ -1,43 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
-import '../providers/orders.dart' show Orders;
-import '../widgets/order_item.dart';
-import 'package:flutter_shop_app/providers/auth.dart';
+import '../providers/cobros.dart' show Cobros;
+import '../widgets/cobro_item.dart';
 
-class OrdersScreen extends StatefulWidget {
-  static const routeName = "./orders";
+class CobrosScreen extends StatefulWidget {
+  static const routeName = "./cobro";
 
   @override
-  _OrdersScreenState createState() => _OrdersScreenState();
+  _CobrosScreenState createState() => _CobrosScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _CobrosScreenState extends State<CobrosScreen> {
   var _searchName = "";
-  Future _ordersFuture;
+  Future _cobrosFuture;
 
-  Future _obtainOrdersFuture() {
-    final auth = Provider.of<Auth>(context, listen: false);
-    if (auth.operation == 'entrega') {
-      return Provider.of<Orders>(context, listen: false)
-          .fetchAndSetOrderFacturado();
-    } else {
-      return Provider.of<Orders>(context, listen: false).fetchAndSetOrder();
-    }
+  Future _obtainCobrosFuture() {
+    return Provider.of<Cobros>(context, listen: false).fetchAndSetCobro();
   }
 
   @override
   void initState() {
-    _ordersFuture = _obtainOrdersFuture();
+    _cobrosFuture = _obtainCobrosFuture();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<Auth>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: (auth.operation == 'entrega')?Text("Mis Ordenes Facturadas"):Text("Mis Ordenes"),
+        title: Text("Mis Cobros"),
+         actions: <Widget>[
+            Container(
+              child: 
+                IconButton(
+                  icon: Icon(Icons.add_box_rounded),
+                  tooltip: 'NUEVO COBRO',
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed('/');
+                  },
+                ),
+            ),
+          ],
       ),
       drawer: AppDrawer(),
       body: Container(
@@ -61,7 +65,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: _ordersFuture,
+                future: _cobrosFuture,
                 builder: (_, dataSnapshot) {
                   if (dataSnapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -73,11 +77,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         child: Text('Ha ocurrido un error!'),
                       );
                     } else {
-                      return Consumer<Orders>(
-                        builder: (_, orderData, child) => ListView.builder(
-                          itemBuilder: (_, index) =>
-                              OrderItem(orderData.orders[index], _searchName),
-                          itemCount: orderData.orders.length,
+                      return Consumer<Cobros>(
+                        builder: (_, cobroData, child) => ListView.builder(
+                          itemBuilder: (_, index) => CobroItem(
+                              cobroData.cobros[index], _searchName),
+                          itemCount: cobroData.cobros.length,
                         ),
                       );
                     }

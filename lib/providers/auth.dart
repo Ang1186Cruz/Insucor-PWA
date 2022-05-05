@@ -10,6 +10,7 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
   Timer _authTimer;
+  String _operation;
 
   bool get isAuth {
     return token != null;
@@ -26,6 +27,14 @@ class Auth with ChangeNotifier {
 
   String get userId {
     return _userId;
+  }
+
+  String get operation {
+    return _operation;
+  }
+
+  void setOperacion(String valor) {
+    _operation = valor;
   }
 
   Future<void> _authenticate(
@@ -50,6 +59,7 @@ class Auth with ChangeNotifier {
         'userId': _userId,
         'expiryDate': _expiryDate.toIso8601String()
       });
+      setOperacion('pedido');
       prefs.setString('userData', userData);
     } catch (error) {
       throw error;
@@ -93,6 +103,7 @@ class Auth with ChangeNotifier {
       _authTimer.cancel();
       _authTimer = null;
     }
+    setOperacion('');
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();

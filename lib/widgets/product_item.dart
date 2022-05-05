@@ -58,7 +58,7 @@ class ProductItem extends StatelessWidget {
                               ),
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
-                                WhitelistingTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly
                               ],
                             ),
                             TextField(

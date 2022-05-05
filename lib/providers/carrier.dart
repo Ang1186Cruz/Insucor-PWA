@@ -32,25 +32,6 @@ class Carriers with ChangeNotifier {
     addCarrier();
     return [..._items];
   }
-
-  // Future<void> fetchAndSetCarrier() async {
-  //   if (_items.length == 0) {
-  //     var url = 'https://distribuidorainsucor.com/APP_Api/api/clientes.php';
-  //     try {
-  //       final response = await http.get(url);
-  //       List<CarrierOne> loadedCarriers = (json.decode(response.body) as List)
-  //           .map((e) => new CarrierOne.fromJson(e))
-  //           .toList();
-  //       _items = loadedCarriers;
-  //       notifyListeners();
-  //       //}
-  //     } catch (exception) {
-  //       print("Error de Listado: " + exception.toString());
-  //       throw exception;
-  //     }
-  //   }
-  // }
-
   void addCarrier() {
     if (_items.length == 0) {
       _items.add(new CarrierOne(id: '1', nombre: 'Mostrador'));
@@ -63,12 +44,4 @@ class Carriers with ChangeNotifier {
     }
   }
 
-  // void clearCarrier() {
-  //   CarrierActive = null;
-  //   if (_items.length > 0) {
-  //     _items.forEach((item) {
-  //       item.isAgregate = false;
-  //     });
-  //   }
-  // }
 }

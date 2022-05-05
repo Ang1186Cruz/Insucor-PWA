@@ -4,9 +4,12 @@ class CartItem {
   final int idPedidP;
   final String id;
   final String title;
-  final int quantity;
+   int quantity;
   final double price;
   final double priceRequested;
+  String descripcion;
+  bool todo;
+  String motivo;
 
   CartItem(
       {this.idPedidP,
@@ -14,13 +17,13 @@ class CartItem {
       @required this.title,
       @required this.quantity,
       @required this.price,
-      this.priceRequested});
+      this.priceRequested,
+      this.descripcion,
+      this.todo = false,
+      this.motivo='completo'});
 }
 
 class Cart with ChangeNotifier {
-  // String nombreCustommer;
-  // String direccionCustommer;
-  // int idCustommer;
   Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {

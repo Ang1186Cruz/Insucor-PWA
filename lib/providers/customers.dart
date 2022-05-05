@@ -13,18 +13,18 @@ class CustomerOne with ChangeNotifier {
   String idLista;
   final String mail;
   bool isAgregate;
+  List<DropdownMenuItem<String>> facturadropdownItems;
 
-  CustomerOne({
-    @required this.id,
-    @required this.nombre,
-    @required this.empresa,
-    this.telefono,
-    this.direccion,
-    this.code,
-    this.idLista,
-    this.mail,
-    this.isAgregate = false,
-  });
+  CustomerOne(
+      {@required this.id,
+      @required this.nombre,
+      @required this.empresa,
+      this.telefono,
+      this.direccion,
+      this.code,
+      this.idLista,
+      this.mail,
+      this.isAgregate = false});
 
   bool validarCliente() {
     if (this.nombre.isEmpty ||
@@ -69,14 +69,13 @@ class Customers with ChangeNotifier {
   }
 
   Future<void> refreshCustomer(String id) async {
-    
     final customerIndex = _items.indexWhere((customer) => customer.id == id);
     var url =
         'https://distribuidorainsucor.com/APP_Api/api/clientes.php?idCustomer=' +
             id;
     try {
       final response = await http.get(url);
-      
+
       CustomerOne newCustomer = (json.decode(response.body) as List)
           .map((e) => new CustomerOne.fromJson(e))
           .first;
@@ -107,11 +106,16 @@ class Customers with ChangeNotifier {
     }
   }
 
-  void addCustommer(
-      String idCustomer, String name, String direccion, String idLista) {
+  void addCustommer(String idCustomer, String name, String direccion,
+      String idLista, String codes, String empres) {
     //
     customerActive = new CustomerOne(
-        id: idCustomer, nombre: name, direccion: direccion, idLista: idLista);
+        id: idCustomer,
+        nombre: name,
+        direccion: direccion,
+        idLista: idLista,
+        code: codes,
+        empresa: empres);
   }
 
   void clearCustomer(String codigo) {
@@ -125,7 +129,8 @@ class Customers with ChangeNotifier {
       _items.forEach((item) {
         if (item.code == codigo) {
           item.isAgregate = true;
-          addCustommer(item.id, item.nombre, item.direccion, item.idLista);
+          addCustommer(
+              item.id, item.nombre, item.direccion, item.idLista, item.code, item.empresa);
         }
       });
     }
@@ -135,6 +140,30 @@ class Customers with ChangeNotifier {
     _items = [];
   }
 
+  Future<void> addFactura() async {
+    
+    if (customerActive != null) {
+      customerActive.facturadropdownItems = [];
+      customerActive.facturadropdownItems.add(
+          new DropdownMenuItem(child: Text("SELECCIONE FACTURA"), value: ""));
+      var url =
+          'https://distribuidorainsucor.com/APP_Api/api/clientes.php?codigoCustomer=' +
+              customerActive.code;
+      try {
+        final response = await http.get(url);
+        final lists =(json.decode(response.body).cast<Map<String, dynamic>>()) as List;
+        customerActive.facturadropdownItems.addAll(lists.map((item) =>
+            new DropdownMenuItem<String>(
+                child: Text(item['numeroFactura']),
+                value: item['numeroFactura'])).toList());
+        notifyListeners();
+      } catch (exception) {
+        print("Error de Listado: " + exception.toString());
+        throw exception;
+      }
+    }
+  }
+ 
   Future<void> addCustomer(CustomerOne product) async {
     // if (_items.length == 0) {
     //   final url =
@@ -168,7 +197,7 @@ class Customers with ChangeNotifier {
   }
 
   Future<void> updateCustomer(String id, CustomerOne newCustomer) async {
-    // 
+    //
     final customerIndex = _items.indexWhere((customer) => customer.id == id);
     if (customerIndex >= 0) {
       final url = 'https://distribuidorainsucor.com/APP_Api/api/clientes.php';

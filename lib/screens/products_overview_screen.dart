@@ -38,7 +38,6 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       setState(() {
         _isLoading = true;
       });
-      debugger();
       final customer = Provider.of<Customers>(context);
       if (customer.customerActive == null) {
         MessageWidget.error(
@@ -48,14 +47,14 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             .refreshCustomer(customer.customerActive.id)
             .then((_) {
           setState(() {
-            debugger();
+            
             customer.customerActive =
                 customer.findById(customer.customerActive.id);
             if (customer.customerActive.validarCliente()) {
               customer.customerActive.isAgregate = true;
-              debugger();
+              
                final card = Provider.of<Cart>(context,listen: false);
-              debugger();
+              
               Provider.of<Products>(context,listen: false)
                   .fetchAndSetProduct(
                       (customer.customerActive == null)
@@ -64,7 +63,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                       card.items)
                   .then((_) {
                 setState(() {
-                  debugger();
+                  
                   _isLoading = false;
                 });
               });

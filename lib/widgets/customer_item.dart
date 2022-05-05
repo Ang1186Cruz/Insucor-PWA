@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shop_app/providers/auth.dart';
 import 'package:flutter_shop_app/providers/products.dart';
 import 'package:flutter_shop_app/providers/cart.dart';
 import 'package:flutter_shop_app/providers/customers.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_shop_app/screens/products_overview_screen.dart';
 import '../screens/edit_customers_screen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../screens/collect_screen.dart';
 
 class CustomerItem extends StatelessWidget {
   final String id;
@@ -14,7 +16,8 @@ class CustomerItem extends StatelessWidget {
   CustomerItem(this.id, this.customerSelect);
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
+    //final cart = Provider.of<Cart>(context, listen: false);
     final customer = Provider.of<CustomerOne>(context, listen: false);
     // if (customer.nombre == customer.) {
     //   customer.isAgregate = true;
@@ -68,8 +71,12 @@ class CustomerItem extends StatelessWidget {
                                           customer.id,
                                           customer.nombre,
                                           customer.direccion,
-                                          customer.idLista);
-                                  Navigator.of(context).pushReplacementNamed(
+                                          customer.idLista,
+                                          customer.code,
+                                          customer.empresa);
+                                  (auth.operation=='cobro')?
+                                  Navigator.of(context).pushNamed(CollectScreen.routeName):
+                                    Navigator.of(context).pushReplacementNamed(
                                       ProductsOverviewScreen.routeName);
                                 } else {
                                   Alert(
@@ -101,12 +108,13 @@ class CustomerItem extends StatelessWidget {
                             Navigator.of(context).pushReplacementNamed('/');
                           }
                         : () {
-                              Navigator.of(context).pushNamed(
-                                  EditcustomerScreen.routeName,
-                                  arguments: customer.id);
+                            Navigator.of(context).pushNamed(
+                                EditcustomerScreen.routeName,
+                                arguments: customer.id);
                           },
                   ),
-                ])),
+                ])
+                ),
           )),
       // new Divider(color: Colors.blue,),
     ]);

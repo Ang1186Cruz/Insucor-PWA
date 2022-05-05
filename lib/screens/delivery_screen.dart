@@ -1,43 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
-import '../providers/orders.dart' show Orders;
-import '../widgets/order_item.dart';
-import 'package:flutter_shop_app/providers/auth.dart';
+import '../screens/orders_screen.dart';
+import '../providers/deliverys.dart' show Deliverys;
+import '../widgets/delivery_item.dart';
 
-class OrdersScreen extends StatefulWidget {
-  static const routeName = "./orders";
+class DeliverysScreen extends StatefulWidget {
+  static const routeName = "./delivery";
 
   @override
-  _OrdersScreenState createState() => _OrdersScreenState();
+  _DeliverysScreenState createState() => _DeliverysScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _DeliverysScreenState extends State<DeliverysScreen> {
   var _searchName = "";
-  Future _ordersFuture;
+  Future _deliverysFuture;
 
-  Future _obtainOrdersFuture() {
-    final auth = Provider.of<Auth>(context, listen: false);
-    if (auth.operation == 'entrega') {
-      return Provider.of<Orders>(context, listen: false)
-          .fetchAndSetOrderFacturado();
-    } else {
-      return Provider.of<Orders>(context, listen: false).fetchAndSetOrder();
-    }
+  Future _obtainDeliverysFuture() {
+    return Provider.of<Deliverys>(context, listen: false).fetchAndSetDelivery();
   }
 
   @override
   void initState() {
-    _ordersFuture = _obtainOrdersFuture();
+    _deliverysFuture = _obtainDeliverysFuture();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<Auth>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: (auth.operation == 'entrega')?Text("Mis Ordenes Facturadas"):Text("Mis Ordenes"),
+        title: Text("Mis Entregas"),
+        actions: <Widget>[
+            Container(
+              child: 
+                IconButton(
+                  icon: Icon(Icons.add_box_rounded),
+                  tooltip: 'NUEVA ENTREGA',
+                  onPressed: () {
+                     Navigator.of(context)
+                  .pushReplacementNamed(OrdersScreen.routeName);
+                  },
+                ),
+            ),
+          ],
       ),
       drawer: AppDrawer(),
       body: Container(
@@ -61,7 +67,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: _ordersFuture,
+                future: _deliverysFuture,
                 builder: (_, dataSnapshot) {
                   if (dataSnapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -73,11 +79,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         child: Text('Ha ocurrido un error!'),
                       );
                     } else {
-                      return Consumer<Orders>(
-                        builder: (_, orderData, child) => ListView.builder(
-                          itemBuilder: (_, index) =>
-                              OrderItem(orderData.orders[index], _searchName),
-                          itemCount: orderData.orders.length,
+                      return Consumer<Deliverys>(
+                        builder: (_, deliveryData, child) => ListView.builder(
+                          itemBuilder: (_, index) => DeliveryItem(
+                              deliveryData.deliverys[index], _searchName),
+                          itemCount: deliveryData.deliverys.length,
                         ),
                       );
                     }

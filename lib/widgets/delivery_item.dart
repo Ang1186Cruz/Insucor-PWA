@@ -1,130 +1,76 @@
 import 'dart:math';
-import 'package:flutter_shop_app/providers/cart.dart';
-import 'package:flutter_shop_app/providers/customers.dart';
-import 'package:flutter_shop_app/providers/products.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_shop_app/providers/auth.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_shop_app/screens/products_overview_screen.dart';
-import '../providers/orders.dart' as ord;
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
-import '../screens/entrega_screen.dart';
+import '../providers/deliverys.dart' as ord;
 
-class OrderItem extends StatefulWidget {
-  final ord.OrderItem order;
+
+class DeliveryItem extends StatefulWidget {
+  final ord.DeliveryItem delivery;
   final String value;
 
-  OrderItem(this.order, this.value);
+  DeliveryItem(this.delivery, this.value);
 
   @override
-  _OrderItemState createState() => _OrderItemState();
+  _DeliveryItemState createState() => _DeliveryItemState();
 }
 
-class _OrderItemState extends State<OrderItem> {
+class _DeliveryItemState extends State<DeliveryItem> {
   var _expanded = false;
   int length = 0;
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<Auth>(context, listen: false);
     bool search = true;
     int cantidadTotal = 0;
     double montoTotal = 0;
     if (!(widget.value.isEmpty || widget.value == "")) {
-      search = (widget.order.nameCustommer
+      search = (widget.delivery.nombre
               .toUpperCase()
               .contains(widget.value.toUpperCase()) ||
-          widget.order.codigo
-              .toUpperCase()
-              .contains(widget.value.toUpperCase()) ||
-          widget.order.transportista
+          widget.delivery.estadoEntrega
               .toUpperCase()
               .contains(widget.value.toUpperCase()));
     }
     length =
-        (widget.order.products.length == 0) ? 1 : widget.order.products.length;
+        (widget.delivery.products.length == 0) ? 1 : widget.delivery.products.length;
 
-    for (var i = 0; i < widget.order.products.length; i++) {
-      cantidadTotal += widget.order.products[i].quantity;
+    for (var i = 0; i < widget.delivery.products.length; i++) {
+      cantidadTotal += widget.delivery.products[i].quantity;
       montoTotal +=
-          (widget.order.products[i].price * widget.order.products[i].quantity);
+          (widget.delivery.products[i].price * widget.delivery.products[i].quantity);
     }
     return search
         ? AnimatedContainer(
-            duration: Duration(milliseconds: 40),
-            height: _expanded ? 500 : 95,
+            duration: Duration(milliseconds: 400),
+            height: _expanded
+                ? 500 
+                : 95,
             child: Card(
-              margin: EdgeInsets.all(2),
+              margin: EdgeInsets.all(10),
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text("(" +
-                        widget.order.codigo +
-                        ") " +
-                        widget.order.nameCustommer),
+                    title: Text(
+                        widget.delivery.nombre),
                     // visualDensity: VisualDensity(vertical: 10),
-                    subtitle: Text(widget.order.transportista +
-                        " - " +
-                        DateFormat("dd/MM/yyyy HH:mm")
-                            .format(widget.order.fecha)),
+                     subtitle: Text(DateFormat("dd/MM/yyyy HH:mm")
+                             .format(widget.delivery.fechaAlta)),
                     trailing: Container(
-                        width: 120,
+                        width: 100,
                         child: Row(children: <Widget>[
-                          IconButton(
-                            icon: Icon(_expanded
-                                ? Icons.expand_less
-                                : Icons.expand_more),
-                            onPressed: () {
-                              setState(() {
-                                _expanded = !_expanded;
-                              });
-                            },
-                          ),
-                           (auth.operation == 'entrega')
-                               ? IconButton(
-                                   icon: Icon(
-                                     Icons.done,
-                                     color: Colors.blue,
-                                   ),
-                                   onPressed: () {
-                                     Navigator.of(context)
-                                         .pushNamed(EntregaScreen.routeName, arguments: widget.order.idOrder);
-                                   },
-                                 )
-                               : 
-                              IconButton(
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: (widget.order.noCerrado == "1")
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
-                                  onPressed: (widget.order.noCerrado == "1")
-                                      ? () {
-                                          reloadCard(
-                                              context,
-                                              widget.order.products,
-                                              widget.order);
-                                        }
-                                      : null,
-                                ),
-                               IconButton(
-                                  icon: Icon(
-                                    Icons.share,
-                                    color: (auth.operation == 'entrega')?Colors.white: Colors.blue,
-                                  ),
-                                  onPressed: () {
-                                    final url =
-                                        "https://distribuidorainsucor.com/tuPedido.php?id=" +
-                                            widget.order.idOrder;
-                                    (auth.operation == 'entrega')? null:
-                                    FlutterOpenWhatsapp.sendSingleMessage(
-                                        "54" + widget.order.telefono, url);
-                                  },
-                                ),
+                           IconButton(
+                             icon: Icon(_expanded
+                                 ? Icons.expand_less
+                                 : Icons.expand_more),
+                             onPressed: () {
+                               setState(() {
+                                 _expanded = !_expanded;
+                               });
+                             },
+                           ),
                         ])),
                   ),
+                  
                   AnimatedContainer(
                     duration: Duration(milliseconds: 50),
                     padding:
@@ -168,8 +114,8 @@ class _OrderItemState extends State<OrderItem> {
                     padding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     height: _expanded
-                        ? //length * 60//((widget.order.products.length + 1) * 50.0) +20
-                        min(widget.order.products.length * 80.0 + 50, 300)
+                        ? 
+                        min(widget.delivery.products.length * 80.0 + 50, 300)
                         : 0,
                     child: ListView.separated(
                       itemBuilder: (_, index) => Row(
@@ -180,7 +126,7 @@ class _OrderItemState extends State<OrderItem> {
                               children: [
                                 Container(
                                     child: Text(
-                                  widget.order.products[index].title,
+                                  widget.delivery.products[index].title,
                                   style: TextStyle(
                                     fontSize: 10,
                                   ),
@@ -208,7 +154,7 @@ class _OrderItemState extends State<OrderItem> {
                               children: [
                                 Container(
                                     child: Text(
-                                  "${widget.order.products[index].quantity}",
+                                  "${widget.delivery.products[index].quantity}",
                                   style: TextStyle(fontSize: 10),
                                   textAlign: TextAlign.center,
                                 )),
@@ -235,12 +181,12 @@ class _OrderItemState extends State<OrderItem> {
                                 Container(
                                     child: Text(
                                   NumberFormat.simpleCurrency().format(
-                                      widget.order.products[index].price),
+                                      widget.delivery.products[index].price),
                                   style: TextStyle(fontSize: 10),
                                   textAlign: TextAlign.right,
                                 )),
                                 ((length - 1) == index)
-                                    ? Container(
+                                    ?  Container(
                                         margin:
                                             const EdgeInsets.only(top: 40.0),
                                         child: Text(
@@ -261,28 +207,14 @@ class _OrderItemState extends State<OrderItem> {
                       ),
                       separatorBuilder: (context, index) =>
                           Divider(height: 1, color: Colors.blueGrey),
-                      itemCount: widget.order.products.length,
+                      itemCount: widget.delivery.products.length,
                     ),
-
-                    
                   ),
+               
                 ],
               ),
             ),
           )
         : AnimatedContainer(duration: const Duration(seconds: 1));
   }
-}
-
-void reloadCard(
-    BuildContext context, List<CartItem> _items, ord.OrderItem order) {
-  // primero limpio todo
-  Provider.of<Customers>(context, listen: false).clearCustomer(order.codigo);
-  Provider.of<Products>(context, listen: false).clearProducts();
-  Provider.of<Cart>(context, listen: false).clearCart();
-  Provider.of<Cart>(context, listen: false).addCart(_items);
-  Provider.of<ord.Orders>(context, listen: false).addOrderModificad(order);
-
-  // recargo customer Productos
-  Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
 }

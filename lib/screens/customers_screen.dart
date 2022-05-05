@@ -4,7 +4,6 @@ import 'package:flutter_shop_app/providers/customers.dart';
 import 'package:provider/provider.dart';
 import '../widgets/customers_grid.dart';
 
-
 class CustomersScreen extends StatefulWidget {
   //static const routeName = "./customers";
 
@@ -13,7 +12,7 @@ class CustomersScreen extends StatefulWidget {
 }
 
 class _CustomersScreenState extends State<CustomersScreen> {
- Future _customersFuture;
+  Future _customersFuture;
   var _searchName = "";
   var _isInit = true;
   var _isLoading = false;
@@ -45,13 +44,15 @@ class _CustomersScreenState extends State<CustomersScreen> {
           title: Text('Clientes'),
           actions: <Widget>[
             Container(
-              child: IconButton(
-                icon: Icon(Icons.refresh_outlined),
-                onPressed: () {
-                  Provider.of<Customers>(context, listen: false).clearCustomerALL();
-                  Navigator.of(context).pushReplacementNamed('/');
-                },
-              ),
+              child: 
+                IconButton(
+                  icon: Icon(Icons.refresh_outlined),
+                  onPressed: () {
+                    Provider.of<Customers>(context, listen: false)
+                        .clearCustomerALL();
+                    Navigator.of(context).pushReplacementNamed('/');
+                  },
+                ),
             ),
           ],
         ),
@@ -81,11 +82,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                       ? Center(
                           child: CircularProgressIndicator(),
                         )
-                      :  CustomersGrid(_searchName)
-                      ),
+                      : CustomersGrid(_searchName)),
             ],
           ),
-        )
-      );
+        ));
   }
 }

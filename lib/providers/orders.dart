@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import './cart.dart';
@@ -89,36 +88,36 @@ class Orders with ChangeNotifier {
       throw exception;
     }
   }
-//}
 
-//   Future<void> fetchAndSetOrder() async {
-//     final url =
-//         'https://flutter-shop-app-b3619.firebaseio.com/orders/$userId.json?auth=$authToken';
-//     final response = await http.get(url);
-//     final List<OrderItem> loadedOrders = [];
-//     final extractedData = json.decode(response.body) as Map<String, dynamic>;
-
-//     if (extractedData != null) {
-//       extractedData.forEach((key, orderData) {
-//         loadedOrders.add(OrderItem(
-//             id: key,
-//             amount: orderData['amount'],
-//             products: (orderData['products'] as List<dynamic>)
-//                 .map((item) => CartItem(
-//                     id: item['id'],
-//                     price: item['price'],
-//                     quantity: item['quantity'],
-//                     title: item['title']))
-//                 .toList(),
-//             dateTime: DateTime.parse(orderData['dateTime'])));
-//       });
-//       _orders = loadedOrders.reversed.toList();
-//       notifyListeners();
-//     }
-//   }
+  Future<void> fetchAndSetOrderFacturado() async {
+    final url = 'https://distribuidorainsucor.com/APP_Api/api/ordenesFacturadas.php';
+    try {
+      final response = await http.get(url);
+      List<OrderItem> loadedCustomers = (json.decode(response.body) as List)
+          .map((e) => new OrderItem.fromJson(e))
+          .toList();
+      _orders = loadedCustomers.reversed.toList();
+      notifyListeners();
+    } catch (exception) {
+      print("NO hay información: " + exception.toString());
+      throw exception;
+    }
+  }
 
   void addOrderModificad(OrderItem order) {
     orderActive = order;
+  }
+
+  void clearOrderActive() {
+    orderActive = null;
+  }
+
+  void activateOrder(String idOrder) {
+    _orders.forEach((item) {
+      if (item.idOrder == idOrder) {
+        orderActive = item;
+      }
+    });
   }
 
   OrderItem getActivated() {
@@ -136,7 +135,7 @@ class Orders with ChangeNotifier {
       String modo) async {
     //
     final url = 'https://distribuidorainsucor.com/APP_Api/api/ordenes.php';
-   
+
     final response = await http.post(url,
         body: json.encode(cartProducts
             .map((product) => {
