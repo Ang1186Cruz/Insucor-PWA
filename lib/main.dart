@@ -1,6 +1,5 @@
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/helpers/custom_route.dart';
 import 'package:flutter_shop_app/providers/customers.dart';
@@ -93,14 +92,21 @@ class MyApp extends StatelessWidget {
             ),
             home: auth.isAuth?
                CustomersScreen() //ProductsOverviewScreen()
-                : FutureBuilder(
-                    future: auth.tryAutoLogin(),
-                    builder: (ctx, authResultSnapshot) =>
-                        authResultSnapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? SplashScreen()
-                            : AuthScreen(),
-                  ),
+                :  //AuthScreen(),//SplashScreen(auth),
+
+                 FutureBuilder(
+                     future: auth.tryAutoLogin(),
+                      builder: (ctx, authResultSnapshot) =>
+                         auth.splash
+                             ? SplashScreen(auth)
+                             : AuthScreen(),
+                    //  builder: (ctx, authResultSnapshot) =>
+                    //      authResultSnapshot.connectionState ==
+                    //              ConnectionState.waiting
+                    //          ? SplashScreen(auth)
+                    //          : AuthScreen(),
+                   ),
+
             routes: {
               ProductsOverviewScreen.routeName:(_) => ProductsOverviewScreen(),
               ProductDetailScreen.routeName: (_) => ProductDetailScreen(),

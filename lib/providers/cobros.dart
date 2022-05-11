@@ -66,7 +66,7 @@ class Cobros with ChangeNotifier {
         'https://distribuidorainsucor.com/APP_Api/api/Cobro.php?idUser=' +
             this.userId;
     try {
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
       List<CobroItem> loadedCustomers = (json.decode(response.body) as List)
           .map((e) => new CobroItem.fromJson(e))
           .toList();
@@ -126,7 +126,7 @@ class Cobros with ChangeNotifier {
         importe: double.parse((importe6 == '') ? '0' : importe6)));
     
     final url = 'https://distribuidorainsucor.com/APP_Api/api/Cobro.php';
-    final response = await http.post(url,
+    final response = await http.post(Uri.parse(url),
         body: json.encode({
           'idCliente': idCliente,
           'idUser': this.userId,

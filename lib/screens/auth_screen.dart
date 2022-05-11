@@ -62,7 +62,7 @@ class AuthScreen extends StatelessWidget {
                       //   ],
                       // ),
                       //child: new Image.asset('../assets/images/logoinsucor.png', height: 60.0, fit: BoxFit.cover,) 
-                      child: new Image.asset('../assets/images/logoinsucor.png',) 
+                      child: new Image.asset('./assets/images/logoinsucor.png',) 
                       // Text(
                       //   'INSUCOR',
                       //   style: TextStyle(

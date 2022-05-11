@@ -74,7 +74,7 @@ class Customers with ChangeNotifier {
         'https://distribuidorainsucor.com/APP_Api/api/clientes.php?idCustomer=' +
             id;
     try {
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
 
       CustomerOne newCustomer = (json.decode(response.body) as List)
           .map((e) => new CustomerOne.fromJson(e))
@@ -92,7 +92,7 @@ class Customers with ChangeNotifier {
     if (_items.length == 0) {
       var url = 'https://distribuidorainsucor.com/APP_Api/api/clientes.php';
       try {
-        final response = await http.get(url);
+        final response = await http.get(Uri.parse(url));
         List<CustomerOne> loadedCustomers = (json.decode(response.body) as List)
             .map((e) => new CustomerOne.fromJson(e))
             .toList();
@@ -150,7 +150,7 @@ class Customers with ChangeNotifier {
           'https://distribuidorainsucor.com/APP_Api/api/clientes.php?codigoCustomer=' +
               customerActive.code;
       try {
-        final response = await http.get(url);
+        final response = await http.get(Uri.parse(url));
         final lists =(json.decode(response.body).cast<Map<String, dynamic>>()) as List;
         customerActive.facturadropdownItems.addAll(lists.map((item) =>
             new DropdownMenuItem<String>(
@@ -202,7 +202,7 @@ class Customers with ChangeNotifier {
     if (customerIndex >= 0) {
       final url = 'https://distribuidorainsucor.com/APP_Api/api/clientes.php';
       await http.post(
-        url,
+        Uri.parse(url),
         body: json.encode({
           'id': newCustomer.id,
           'nombre': newCustomer.nombre,

@@ -11,6 +11,11 @@ class Auth with ChangeNotifier {
   String _userId;
   Timer _authTimer;
   String _operation;
+  bool splash = true;
+
+  bool get IsDplash {
+    return splash;
+  }
 
   bool get isAuth {
     return token != null;
@@ -33,6 +38,10 @@ class Auth with ChangeNotifier {
     return _operation;
   }
 
+  void changeSplash() {
+    splash = false;
+  }
+
   void setOperacion(String valor) {
     _operation = valor;
   }
@@ -41,7 +50,7 @@ class Auth with ChangeNotifier {
       String email, String password, String urlSegment) async {
     final url = "https://distribuidorainsucor.com/APP_Api/api/login.php";
     try {
-      final response = await http.post(url,
+      final response = await http.post(Uri.parse(url),
           body: json.encode({'email': email, 'password': password}));
       final responseData = json.decode(response.body);
       if (responseData['error'] != null) {

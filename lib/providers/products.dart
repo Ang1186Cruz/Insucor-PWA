@@ -50,7 +50,7 @@ class Products with ChangeNotifier {
           'https://distribuidorainsucor.com/APP_Api/api/productos.php?idLista=' +
               idLista;
       try {
-        final response = await http.get(url);
+        final response = await http.get(Uri.parse(url));
         List<Product> loadedProducts = (json.decode(response.body) as List)
             .map((e) => new Product.fromJson(e,listaProducto))
             .toList();
@@ -78,7 +78,7 @@ class Products with ChangeNotifier {
           'https://flutter-shop-app-b3619.firebaseio.com/products.json?auth=$authToken';
       try {
         final response = await http.post(
-          url,
+          Uri.parse(url),
           body: json.encode({
             'title': product.title,
             'description': product.description,
@@ -110,7 +110,7 @@ class Products with ChangeNotifier {
       final url =
           'https://flutter-shop-app-b3619.firebaseio.com/products/$id.json?auth=$authToken';
       await http.patch(
-        url,
+        Uri.parse(url),
         body: json.encode({
           'title': newProduct.title,
           'description': newProduct.description,
@@ -134,7 +134,7 @@ class Products with ChangeNotifier {
     _items.removeAt(existingProductIndex);
     notifyListeners();
 
-    final response = await http.delete(url);
+    final response = await http.delete(Uri.parse(url));
 
     if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);

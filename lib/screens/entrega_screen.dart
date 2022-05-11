@@ -449,9 +449,11 @@ class _EntregaScreenState extends State<EntregaScreen> {
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () {
+              Navigator.of(context).pop();
               Provider.of<Orders>(context, listen: false).clearOrderActive();
               Provider.of<Customers>(context, listen: false).clearCustomer("");
               Provider.of<Products>(context, listen: false).clearProducts();
+              
               Navigator.of(context).pushReplacementNamed('/');
             },
             width: 120,

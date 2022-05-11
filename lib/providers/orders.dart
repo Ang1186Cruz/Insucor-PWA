@@ -77,7 +77,7 @@ class Orders with ChangeNotifier {
   Future<void> fetchAndSetOrder() async {
     final url = 'https://distribuidorainsucor.com/APP_Api/api/ordenes.php';
     try {
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
       List<OrderItem> loadedCustomers = (json.decode(response.body) as List)
           .map((e) => new OrderItem.fromJson(e))
           .toList();
@@ -92,7 +92,7 @@ class Orders with ChangeNotifier {
   Future<void> fetchAndSetOrderFacturado() async {
     final url = 'https://distribuidorainsucor.com/APP_Api/api/ordenesFacturadas.php';
     try {
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
       List<OrderItem> loadedCustomers = (json.decode(response.body) as List)
           .map((e) => new OrderItem.fromJson(e))
           .toList();
@@ -136,7 +136,7 @@ class Orders with ChangeNotifier {
     //
     final url = 'https://distribuidorainsucor.com/APP_Api/api/ordenes.php';
 
-    final response = await http.post(url,
+    final response = await http.post(Uri.parse(url),
         body: json.encode(cartProducts
             .map((product) => {
                   'idPedido': idOrder,

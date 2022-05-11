@@ -64,7 +64,7 @@ class Deliverys with ChangeNotifier {
         'https://distribuidorainsucor.com/APP_Api/api/Entrega.php?idUser=' +
             this.userId;
     try {
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
       List<DeliveryItem> loadedCustomers = (json.decode(response.body) as List)
           .map((e) => new DeliveryItem.fromJson(e))
           .toList();
@@ -88,7 +88,7 @@ class Deliverys with ChangeNotifier {
       }
     }
     final url = 'https://distribuidorainsucor.com/APP_Api/api/Entrega.php';
-    final response = await http.post(url,
+    final response = await http.post(Uri.parse(url),
         body: json.encode({
           'idUser': this.userId,
           'idPedido': order.idOrder,

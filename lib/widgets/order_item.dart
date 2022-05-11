@@ -81,19 +81,19 @@ class _OrderItemState extends State<OrderItem> {
                               });
                             },
                           ),
-                           (auth.operation == 'entrega')
-                               ? IconButton(
-                                   icon: Icon(
-                                     Icons.done,
-                                     color: Colors.blue,
-                                   ),
-                                   onPressed: () {
-                                     Navigator.of(context)
-                                         .pushNamed(EntregaScreen.routeName, arguments: widget.order.idOrder);
-                                   },
-                                 )
-                               : 
-                              IconButton(
+                          (auth.operation == 'entrega')
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.done,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pushNamed(
+                                        EntregaScreen.routeName,
+                                        arguments: widget.order.idOrder);
+                                  },
+                                )
+                              : IconButton(
                                   icon: Icon(
                                     Icons.edit,
                                     color: (widget.order.noCerrado == "1")
@@ -109,20 +109,22 @@ class _OrderItemState extends State<OrderItem> {
                                         }
                                       : null,
                                 ),
-                               IconButton(
-                                  icon: Icon(
-                                    Icons.share,
-                                    color: (auth.operation == 'entrega')?Colors.white: Colors.blue,
-                                  ),
-                                  onPressed: () {
-                                    final url =
-                                        "https://distribuidorainsucor.com/tuPedido.php?id=" +
-                                            widget.order.idOrder;
-                                    (auth.operation == 'entrega')? null:
-                                    FlutterOpenWhatsapp.sendSingleMessage(
-                                        "54" + widget.order.telefono, url);
-                                  },
-                                ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.share,
+                              color: (auth.operation == 'entrega')
+                                  ? Colors.white
+                                  : Colors.blue,
+                            ),
+                            onPressed: () {
+                              final url =
+                                  "https://distribuidorainsucor.com/tuPedido.php?id=" +
+                                      widget.order.idOrder;
+                              (auth.operation == 'entrega') ? null : null;
+                              FlutterOpenWhatsapp.sendSingleMessage(
+                                  "54" + widget.order.telefono, url);
+                            },
+                          ),
                         ])),
                   ),
                   AnimatedContainer(
@@ -263,8 +265,6 @@ class _OrderItemState extends State<OrderItem> {
                           Divider(height: 1, color: Colors.blueGrey),
                       itemCount: widget.order.products.length,
                     ),
-
-                    
                   ),
                 ],
               ),
