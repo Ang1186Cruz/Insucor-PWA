@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import './cart.dart';
@@ -17,6 +18,7 @@ class OrderItem {
   String observacion;
   String modo;
   String telefono;
+  double importe;
   final List<CartItem> products;
 
   OrderItem(
@@ -33,6 +35,7 @@ class OrderItem {
       this.observacion,
       this.modo,
       this.telefono,
+      this.importe,
       this.products});
   factory OrderItem.fromJson(Map<String, dynamic> parseJson) {
     return OrderItem(
@@ -49,6 +52,7 @@ class OrderItem {
       observacion: parseJson['observacion'],
       modo: parseJson['modo'],
       telefono: parseJson['telefono'],
+      importe: double.parse(parseJson['importe'] ?? "0"),
       products: (parseJson['product'] as List<dynamic>)
           .map((item) => CartItem(
               idPedidP: int.parse(item['idPedidoP']),
@@ -65,6 +69,8 @@ class OrderItem {
 class Orders with ChangeNotifier {
   OrderItem orderActive;
   List<OrderItem> _orders = [];
+  List<OrderItem> _ordersOrdenes = [];
+  List<OrderItem> _ordersOrdenesFacturadas = [];
   final String authToken;
   final String userId;
 
@@ -75,33 +81,42 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrder() async {
+    _orders = [];
+    //if (_ordersOrdenes.length <= 0) {
     final url = 'https://distribuidorainsucor.com/APP_Api/api/ordenes.php';
     try {
       final response = await http.get(Uri.parse(url));
       List<OrderItem> loadedCustomers = (json.decode(response.body) as List)
           .map((e) => new OrderItem.fromJson(e))
           .toList();
-      _orders = loadedCustomers.reversed.toList();
+      _ordersOrdenes = loadedCustomers.reversed.toList();
       notifyListeners();
     } catch (exception) {
       print("NO hay información: " + exception.toString());
       throw exception;
     }
+    //}
+    _orders = _ordersOrdenes;
   }
 
   Future<void> fetchAndSetOrderFacturado() async {
-    final url = 'https://distribuidorainsucor.com/APP_Api/api/ordenesFacturadas.php';
-    try {
-      final response = await http.get(Uri.parse(url));
-      List<OrderItem> loadedCustomers = (json.decode(response.body) as List)
-          .map((e) => new OrderItem.fromJson(e))
-          .toList();
-      _orders = loadedCustomers.reversed.toList();
-      notifyListeners();
-    } catch (exception) {
-      print("NO hay información: " + exception.toString());
-      throw exception;
+    _orders = [];
+    if (_ordersOrdenesFacturadas.length <= 0) {
+      final url =
+          'https://distribuidorainsucor.com/APP_Api/api/ordenesFacturadas.php';
+      try {
+        final response = await http.get(Uri.parse(url));
+        List<OrderItem> loadedCustomers = (json.decode(response.body) as List)
+            .map((e) => new OrderItem.fromJson(e))
+            .toList();
+        _ordersOrdenesFacturadas = loadedCustomers.reversed.toList();
+        notifyListeners();
+      } catch (exception) {
+        print("NO hay información: " + exception.toString());
+        throw exception;
+      }
     }
+    _orders = _ordersOrdenesFacturadas;
   }
 
   void addOrderModificad(OrderItem order) {
@@ -149,6 +164,7 @@ class Orders with ChangeNotifier {
                   'dateDelivery': dateDelivery,
                   'idCarrier': idCarrier,
                   'modo': modo,
+                  'userId': userId
                 })
             .toList()));
     notifyListeners();

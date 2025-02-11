@@ -125,7 +125,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                   title: Text('A OCURRIDO UN ERROR'),
                   content: Text(exception.toString()),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('GUARDADO EXITOSAMENTE !!!'),
                       onPressed: () {
                         Navigator.of(innerContext).pop();
@@ -156,417 +156,206 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: _form,
-                child: ListView(
-                  children: <Widget>[
-                    TextFormField(
-                      initialValue: _initValues['nombre'],
-                      decoration: InputDecoration(
-                        labelText: 'Nombre',
-                      ),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Es requerido el campo';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedcustomer = CustomerOne(
-                          id: _editedcustomer.id,
-                          nombre: value,
-                          empresa: _editedcustomer.empresa,
-                          telefono: _editedcustomer.telefono,
-                          direccion: _editedcustomer.direccion,
-                          code: _editedcustomer.code,
-                          idLista: _editedcustomer.idLista,
-                          mail: _editedcustomer.mail,
-                        );
-                      },
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_priceFocusNode);
-                      },
-                    ),
-
-                    TextFormField(
-                      initialValue: _initValues['empresa'],
-                      decoration: InputDecoration(
-                        labelText: 'Empresa',
-                      ),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Es requerido el campo';
-                        }
-                        if (value.length < 5) {
-                          return '¡Debe tener al menos 5 caracteres o más!';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedcustomer = CustomerOne(
-                          id: _editedcustomer.id,
-                          nombre: _editedcustomer.nombre,
-                          empresa: value,
-                          telefono: _editedcustomer.telefono,
-                          direccion: _editedcustomer.direccion,
-                          code: _editedcustomer.code,
-                          idLista: _editedcustomer.idLista,
-                          mail: _editedcustomer.mail,
-                        );
-                      },
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_priceFocusNode);
-                      },
-                    ),
-
-                    TextFormField(
-                      initialValue: _initValues['telefono'],
-                      decoration: InputDecoration(
-                        labelText: 'Telefono-WhatsApp',
-                      ),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Es requerido el campo';
-                        }
-                        if ((value.length < 9) || (value.length > 12)) {
-                          return 'El telefono debe estar entre 9 a 12';
-                        }
-                        if (double.tryParse(value) == null) {
-                          return 'Por favor solo ingrese numeros';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedcustomer = CustomerOne(
-                          id: _editedcustomer.id,
-                          nombre: _editedcustomer.nombre,
-                          empresa: _editedcustomer.empresa,
-                          telefono: value,
-                          direccion: _editedcustomer.direccion,
-                          code: _editedcustomer.code,
-                          idLista: _editedcustomer.idLista,
-                          mail: _editedcustomer.mail,
-                        );
-                      },
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_priceFocusNode);
-                      },
-                    ),
-
-                    TextFormField(
-                      initialValue: _initValues['direccion'],
-                      decoration: InputDecoration(
-                        labelText: 'Direccion',
-                      ),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Es requerido el campo';
-                        }
-                        if (value.length < 5) {
-                          return '¡Debe tener al menos 5 caracteres o más!';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedcustomer = CustomerOne(
-                          id: _editedcustomer.id,
-                          nombre: _editedcustomer.nombre,
-                          empresa: _editedcustomer.empresa,
-                          telefono: _editedcustomer.telefono,
-                          direccion: value,
-                          code: _editedcustomer.code,
-                          idLista: _editedcustomer.idLista,
-                          mail: _editedcustomer.mail,
-                        );
-                      },
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_priceFocusNode);
-                      },
-                    ),
-
-                    TextFormField(
-                      readOnly: true,
-                      initialValue: _initValues['code'],
-                      decoration: InputDecoration(
-                        labelText: 'Codigo',
-                      ),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Es requerido el campo';
-                        }
-                        if (value.length < 3) {
-                          return '¡Debe tener al menos 3 caracteres o más!';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedcustomer = CustomerOne(
-                          id: _editedcustomer.id,
-                          nombre: _editedcustomer.nombre,
-                          empresa: _editedcustomer.empresa,
-                          telefono: _editedcustomer.telefono,
-                          direccion: _editedcustomer.direccion,
-                          code: value,
-                          idLista: _editedcustomer.idLista,
-                          mail: _editedcustomer.mail,
-                        );
-                      },
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_priceFocusNode);
-                      },
-                    ),
-                    TextFormField(
-                      initialValue: _initValues['mail'],
-                      decoration: InputDecoration(
-                        labelText: 'E-mail',
-                      ),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Es requerido el campo';
-                        }
-                        if (value.length < 5) {
-                          return '¡Debe tener al menos 5 caracteres o más!';
-                        }
-                        if (!EmailValidator.validate(value)) {
-                          return 'No tiene el formato del mail';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedcustomer = CustomerOne(
-                          id: _editedcustomer.id,
-                          nombre: _editedcustomer.nombre,
-                          empresa: _editedcustomer.empresa,
-                          telefono: _editedcustomer.telefono,
-                          direccion: _editedcustomer.direccion,
-                          code: _editedcustomer.code,
-                          idLista: _editedcustomer.idLista,
-                          mail: value,
-                        );
-                      },
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_priceFocusNode);
-                      },
-                    ),
-                    // DropdownButtonFormField(
-                    //       value: _editedcustomer.idLista,
-                    //       isExpanded: true,
-                    //       decoration: InputDecoration(labelText: "Lista Precio"),
-                    //       items: <DropdownMenuItem<String>>[
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 1"),
-                    //           value: "1",
-                    //         ),
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 2"),
-                    //           value: "2",
-                    //         ),
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 3"),
-                    //           value: "3",
-                    //         ),
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 4"),
-                    //           value: "4",
-                    //         ),
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 5"),
-                    //           value: "5",
-                    //         ),
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 6"),
-                    //           value: "6",
-                    //         ),
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 7"),
-                    //           value: "7",
-                    //         ),
-                    //         DropdownMenuItem(
-                    //           child: Text("Lista 9"),
-                    //           value: "9",
-                    //         )
-                    //       ],
-                    //       onChanged: (String value) {
-                    //         setState(() {
-                    //           _editedcustomer.idLista = value;
-                    //         });
-                    //       },
-                    //        onSaved: (value) {
-                    //           _editedcustomer = CustomerOne(
-                    //             id: _editedcustomer.id,
-                    //             nombre: _editedcustomer.nombre,
-                    //             empresa: _editedcustomer.empresa,
-                    //             telefono: _editedcustomer.telefono,
-                    //             direccion: _editedcustomer.direccion,
-                    //             code: _editedcustomer.code,
-                    //             idLista: value,
-                    //           );
-                    //         },
-                    //     ),
-
-                    // TextFormField(
-                    //   initialValue: _initValues['idLista'],
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Lista Precio',
-                    //   ),
-                    //   textInputAction: TextInputAction.next,
-                    //   validator: (value) {
-                    //     if (value.isEmpty) {
-                    //       return 'Es requerido el campo';
-                    //     }
-                    //     return null;
-                    //   },
-                    //   onSaved: (value) {
-                    //     _editedcustomer = CustomerOne(
-                    //       id: _editedcustomer.id,
-                    //       nombre: _editedcustomer.nombre,
-                    //       empresa: _editedcustomer.empresa,
-                    //       telefono: _editedcustomer.telefono,
-                    //       direccion: _editedcustomer.direccion,
-                    //       code: _editedcustomer.code,
-                    //       idLista: value,
-                    //     );
-                    //   },
-                    //   onFieldSubmitted: (_) {
-                    //     FocusScope.of(context).requestFocus(_priceFocusNode);
-                    //   },
-                    // ),
-
-                    // TextFormField(
-                    //   initialValue: _initValues['price'],
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Price',
-                    //   ),
-                    //   textInputAction: TextInputAction.next,
-                    //   keyboardType: TextInputType.number,
-                    //   focusNode: _priceFocusNode,
-                    //   onSaved: (value) {
-                    //     _editedcustomer = customer(
-                    //       id: _editedcustomer.id,
-                    //       title: _editedcustomer.title,
-                    //       description: _editedcustomer.description,
-                    //       price: double.parse(value),
-                    //       imageUrl: _editedcustomer.imageUrl,
-                    //       isAgregate: _editedcustomer.isAgregate,
-                    //     );
-                    //   },
-                    //   onFieldSubmitted: (_) {
-                    //     FocusScope.of(context)
-                    //         .requestFocus(_descriptionFocusNode);
-                    //   },
-                    //   validator: (value) {
-                    //     if (value.isEmpty) {
-                    //       return 'Please provide a price!';
-                    //     }
-                    //     if (double.tryParse(value) == null) {
-                    //       return 'Please enter a valid number!';
-                    //     }
-                    //     if (double.parse(value) <= 0) {
-                    //       return 'Please enter a number greater than 0';
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
-                    // TextFormField(
-                    //   initialValue: _initValues['description'],
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Description',
-                    //   ),
-                    //   maxLines: 3,
-                    //   keyboardType: TextInputType.multiline,
-                    //   focusNode: _descriptionFocusNode,
-                    //   onSaved: (value) {
-                    //     _editedcustomer = customer(
-                    //       id: _editedcustomer.id,
-                    //       title: _editedcustomer.title,
-                    //       description: value,
-                    //       price: _editedcustomer.price,
-                    //       imageUrl: _editedcustomer.imageUrl,
-                    //       isAgregate: _editedcustomer.isAgregate,
-                    //     );
-                    //   },
-                    //   validator: (value) {
-                    //     if (value.isEmpty) {
-                    //       return 'Please provide a description!';
-                    //     }
-                    //     if (value.length < 10) {
-                    //       return 'Should be at least 10 character or more!';
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
-
-                    /*   Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          width: 100,
-                          height: 100,
-                          margin: EdgeInsets.only(
-                            top: 8,
-                            right: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: Colors.grey),
-                          ),
-                          child: _imageUrlController.text.isEmpty
-                              ? Text('Enter a URL')
-                              : FittedBox(
-                                  child:
-                                      Image.network(_imageUrlController.text),
-                                  fit: BoxFit.cover,
-                                ),
+          : Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: _form,
+                  child: ListView(
+                    children: <Widget>[
+                      TextFormField(
+                        initialValue: _initValues['nombre'],
+                        decoration: InputDecoration(
+                          labelText: 'Nombre',
                         ),
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Image URL',
-                            ),
-                            keyboardType: TextInputType.url,
-                            textInputAction: TextInputAction.done,
-                            controller: _imageUrlController,
-                            focusNode: _imageUrlFocusNode,
-                            onSaved: (value) {
-                              _editedcustomer = customer(
-                                id: _editedcustomer.id,
-                                title: _editedcustomer.title,
-                                description: _editedcustomer.description,
-                                price: _editedcustomer.price,
-                                imageUrl: value,
-                                isAgregate: _editedcustomer.isAgregate,
-                              );
-                            },
-                            onFieldSubmitted: (value) => _saveForm(),
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please enter a valid image url!';
-                              }
-                              if (!value.startsWith('http') ||
-                                  !value.startsWith('https')) {
-                                return 'Please enter a valid url!';
-                              }
-                              // if(!value.endsWith('.png') || !value.endsWith('.jpg') || !value.endsWith('.jpeg')) {
-                              //   return 'Please enter a valid image url!';
-                              // }
-                              return null;
-                            },
-                            onEditingComplete: () {
-                              setState(() {});
-                            },
-                          ),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Es requerido el campo';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _editedcustomer = CustomerOne(
+                            id: _editedcustomer.id,
+                            nombre: value,
+                            empresa: _editedcustomer.empresa,
+                            telefono: _editedcustomer.telefono,
+                            direccion: _editedcustomer.direccion,
+                            code: _editedcustomer.code,
+                            idLista: _editedcustomer.idLista,
+                            mail: _editedcustomer.mail,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_priceFocusNode);
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: _initValues['empresa'],
+                        decoration: InputDecoration(
+                          labelText: 'Empresa',
                         ),
-                      ],
-                    ),
-                  */
-                  ],
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Es requerido el campo';
+                          }
+                          if (value.length < 5) {
+                            return '¡Debe tener al menos 5 caracteres o más!';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _editedcustomer = CustomerOne(
+                            id: _editedcustomer.id,
+                            nombre: _editedcustomer.nombre,
+                            empresa: value,
+                            telefono: _editedcustomer.telefono,
+                            direccion: _editedcustomer.direccion,
+                            code: _editedcustomer.code,
+                            idLista: _editedcustomer.idLista,
+                            mail: _editedcustomer.mail,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_priceFocusNode);
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: _initValues['telefono'],
+                        decoration: InputDecoration(
+                          labelText: 'Telefono-WhatsApp',
+                        ),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Es requerido el campo';
+                          }
+                          if ((value.length < 9) || (value.length > 12)) {
+                            return 'El telefono debe estar entre 9 a 12';
+                          }
+                          if (double.tryParse(value) == null) {
+                            return 'Por favor solo ingrese numeros';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _editedcustomer = CustomerOne(
+                            id: _editedcustomer.id,
+                            nombre: _editedcustomer.nombre,
+                            empresa: _editedcustomer.empresa,
+                            telefono: value,
+                            direccion: _editedcustomer.direccion,
+                            code: _editedcustomer.code,
+                            idLista: _editedcustomer.idLista,
+                            mail: _editedcustomer.mail,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_priceFocusNode);
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: _initValues['direccion'],
+                        decoration: InputDecoration(
+                          labelText: 'Direccion',
+                        ),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Es requerido el campo';
+                          }
+                          if (value.length < 5) {
+                            return '¡Debe tener al menos 5 caracteres o más!';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _editedcustomer = CustomerOne(
+                            id: _editedcustomer.id,
+                            nombre: _editedcustomer.nombre,
+                            empresa: _editedcustomer.empresa,
+                            telefono: _editedcustomer.telefono,
+                            direccion: value,
+                            code: _editedcustomer.code,
+                            idLista: _editedcustomer.idLista,
+                            mail: _editedcustomer.mail,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_priceFocusNode);
+                        },
+                      ),
+                      TextFormField(
+                        readOnly: true,
+                        initialValue: _initValues['code'],
+                        decoration: InputDecoration(
+                          labelText: 'Codigo',
+                        ),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Es requerido el campo';
+                          }
+                          if (value.length < 3) {
+                            return '¡Debe tener al menos 3 caracteres o más!';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _editedcustomer = CustomerOne(
+                            id: _editedcustomer.id,
+                            nombre: _editedcustomer.nombre,
+                            empresa: _editedcustomer.empresa,
+                            telefono: _editedcustomer.telefono,
+                            direccion: _editedcustomer.direccion,
+                            code: value,
+                            idLista: _editedcustomer.idLista,
+                            mail: _editedcustomer.mail,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_priceFocusNode);
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: _initValues['mail'],
+                        decoration: InputDecoration(
+                          labelText: 'E-mail',
+                        ),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Es requerido el campo';
+                          }
+                          if (value.length < 5) {
+                            return '¡Debe tener al menos 5 caracteres o más!';
+                          }
+                          if (!EmailValidator.validate(value)) {
+                            return 'No tiene el formato del mail';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _editedcustomer = CustomerOne(
+                            id: _editedcustomer.id,
+                            nombre: _editedcustomer.nombre,
+                            empresa: _editedcustomer.empresa,
+                            telefono: _editedcustomer.telefono,
+                            direccion: _editedcustomer.direccion,
+                            code: _editedcustomer.code,
+                            idLista: _editedcustomer.idLista,
+                            mail: value,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_priceFocusNode);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

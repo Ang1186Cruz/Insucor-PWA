@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import './routes.dart';
 
 class ChequesItem {
   String numero;
@@ -17,6 +18,7 @@ class CobroItem {
   double totalEfectivo;
   double totalCheque;
   double totalRecibido;
+  DateTime fechaCobro;
 
   CobroItem(
       {@required this.idCobro,
@@ -25,7 +27,9 @@ class CobroItem {
       this.noFactura,
       this.totalEfectivo,
       this.totalCheque,
-      this.totalRecibido});
+      this.totalRecibido,
+      this.fechaCobro});
+
   factory CobroItem.fromJson(Map<String, dynamic> parseJson) {
     return CobroItem(
       idCobro: parseJson['IdCobro'],
@@ -35,16 +39,7 @@ class CobroItem {
       totalEfectivo: double.parse(parseJson['TotalEfectivo']),
       totalCheque: double.parse(parseJson['TotalCheque']),
       totalRecibido: double.parse(parseJson['TotalRecibido']),
-      // products: (parseJson['product'] as List<dynamic>)
-      //     .map((item) => CartItem(
-      //         idPedidP: int.parse(item['IdDetalle']),
-      //         id: item['idProducto'],
-      //         price: double.parse(item['Precio'] ?? "0"),
-      //         quantity: int.parse(item['Cantidad'] ?? "0"),
-      //         title: item['nombrePro']
-      //         //  priceRequested: double.parse(item['priceRequested'] ?? "0")
-      //         ))
-      //     .toList(),
+      fechaCobro: DateTime.parse(parseJson['FechaCobro']),
     );
   }
 }
@@ -81,6 +76,7 @@ class Cobros with ChangeNotifier {
   Future<void> addCobro(
       String idCliente,
       String numFactura,
+      String edosMil,
       String eMil,
       String eQuinientos,
       String eDocientos,
@@ -104,7 +100,9 @@ class Cobros with ChangeNotifier {
       String iRecibido,
       String tEfectivo,
       String tCheque,
-      String tRecibido) async {
+      String tRecibido,
+      String idRuta,
+      bool notControl) async {
     List<ChequesItem> _items = [];
     _items.add(new ChequesItem(
         numero: numero1,
@@ -124,26 +122,33 @@ class Cobros with ChangeNotifier {
     _items.add(new ChequesItem(
         numero: numero6,
         importe: double.parse((importe6 == '') ? '0' : importe6)));
-    
+    await Routes.UpdateRoute(idRuta);
     final url = 'https://distribuidorainsucor.com/APP_Api/api/Cobro.php';
     final response = await http.post(Uri.parse(url),
         body: json.encode({
           'idCliente': idCliente,
           'idUser': this.userId,
           'numFactura': numFactura,
-          'eMil': int.parse((eMil=='')?'0': eMil),
-          'eQuinientos': int.parse((eQuinientos=='')?'0': eQuinientos),
-          'eDocientos': int.parse((eDocientos=='')?'0': eDocientos),
-          'eCien': int.parse((eCien=='')?'0': eCien),
-          'eCincuenta': int.parse((eCincuenta=='')?'0': eCincuenta),
-          'eVeinte': int.parse((eVeinte=='')?'0': eVeinte),
-          'eDiez': int.parse((eDiez=='')?'0': eDiez),
-          'ListaItem':  _items.map((e) => {'numero':e.numero, 'importe': e.importe, }).toList(),
+          'edosMil': int.parse((edosMil == '') ? '0' : edosMil),
+          'eMil': int.parse((eMil == '') ? '0' : eMil),
+          'eQuinientos': int.parse((eQuinientos == '') ? '0' : eQuinientos),
+          'eDocientos': int.parse((eDocientos == '') ? '0' : eDocientos),
+          'eCien': int.parse((eCien == '') ? '0' : eCien),
+          'eCincuenta': int.parse((eCincuenta == '') ? '0' : eCincuenta),
+          'eVeinte': int.parse((eVeinte == '') ? '0' : eVeinte),
+          'eDiez': int.parse((eDiez == '') ? '0' : eDiez),
+          'ListaItem': _items
+              .map((e) => {
+                    'numero': e.numero,
+                    'importe': e.importe,
+                  })
+              .toList(),
           'comentario': comentario,
           'iRecibido': double.parse((iRecibido == '') ? '0' : iRecibido),
           'tEfectivo': double.parse((tEfectivo == '') ? '0' : tEfectivo),
           'tCheque': double.parse((tCheque == '') ? '0' : tCheque),
           'tRecibido': double.parse((tRecibido == '') ? '0' : tRecibido),
+          'notControl': notControl ? 1 : 0,
         }));
     notifyListeners();
   }

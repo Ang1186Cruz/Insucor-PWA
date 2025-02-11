@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
+import '../main.dart';
+import '../providers/customers.dart';
 import '../providers/orders.dart' show Orders;
 import '../widgets/order_item.dart';
 import 'package:flutter_shop_app/providers/auth.dart';
@@ -17,7 +19,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Future _ordersFuture;
 
   Future _obtainOrdersFuture() {
+    Provider.of<Customers>(context).refreshCustomer('0').then((_) {
+      setState(() {});
+    });
+
     final auth = Provider.of<Auth>(context, listen: false);
+
     if (auth.operation == 'entrega') {
       return Provider.of<Orders>(context, listen: false)
           .fetchAndSetOrderFacturado();
@@ -37,7 +44,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final auth = Provider.of<Auth>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: (auth.operation == 'entrega')?Text("Mis Ordenes Facturadas"):Text("Mis Ordenes"),
+        title: (auth.operation == 'entrega')
+            ? Text("Mis Ordenes Facturadas")
+            : Text("Mis Ordenes"),
       ),
       drawer: AppDrawer(),
       body: Container(
@@ -46,17 +55,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                style: TextStyle(color: Colors.white),
                 onChanged: (value) {
                   setState(() {
                     _searchName = value;
                   });
                 },
-                decoration: InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+                decoration: MyApp().inputDecorationCustom(),
               ),
             ),
             Expanded(

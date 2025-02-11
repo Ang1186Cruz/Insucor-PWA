@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop_app/screens/customers_screen.dart';
 import 'package:flutter_shop_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
+import '../main.dart';
 import '../providers/cobros.dart' show Cobros;
 import '../widgets/cobro_item.dart';
 
@@ -30,18 +32,18 @@ class _CobrosScreenState extends State<CobrosScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Mis Cobros"),
-         actions: <Widget>[
-            Container(
-              child: 
-                IconButton(
-                  icon: Icon(Icons.add_box_rounded),
-                  tooltip: 'NUEVO COBRO',
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed('/');
-                  },
-                ),
+        actions: <Widget>[
+          Container(
+            child: IconButton(
+              icon: Icon(Icons.add_box_rounded),
+              tooltip: 'NUEVO COBRO',
+              onPressed: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(CustomersScreen.routeName);
+              },
             ),
-          ],
+          ),
+        ],
       ),
       drawer: AppDrawer(),
       body: Container(
@@ -50,17 +52,13 @@ class _CobrosScreenState extends State<CobrosScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                style: TextStyle(color: Colors.white),
                 onChanged: (value) {
                   setState(() {
                     _searchName = value;
                   });
                 },
-                decoration: InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+                decoration: MyApp().inputDecorationCustom(),
               ),
             ),
             Expanded(
@@ -79,8 +77,8 @@ class _CobrosScreenState extends State<CobrosScreen> {
                     } else {
                       return Consumer<Cobros>(
                         builder: (_, cobroData, child) => ListView.builder(
-                          itemBuilder: (_, index) => CobroItem(
-                              cobroData.cobros[index], _searchName),
+                          itemBuilder: (_, index) =>
+                              CobroItem(cobroData.cobros[index], _searchName),
                           itemCount: cobroData.cobros.length,
                         ),
                       );

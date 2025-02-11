@@ -11,8 +11,8 @@ class UserProductsScreen extends StatelessWidget {
   static const routeName = './user-products';
 
 
-  Future<void> _refreshProducts(BuildContext context, String search, String idLista) async {
-    await Provider.of<Products>(context, listen: false).fetchAndSetProduct(idLista,null);
+  Future<void> _refreshProducts(BuildContext context, String search, String idLista, String idCliente) async {
+    await Provider.of<Products>(context, listen: false).fetchAndSetProduct(idLista,null,idCliente);
   }
 
   @override
@@ -23,17 +23,6 @@ class UserProductsScreen extends StatelessWidget {
         appBar: AppBar(
            title: Text('Listado de Productos'),
           actions: <Widget>[
-            // TextField(
-            //   onChanged: (value) =>  _refreshProducts(context,value),
-            //   decoration: InputDecoration(
-            //       labelText: 'Search', suffixIcon: Icon(Icons.search)),
-            // ),
-            // IconButton(
-            //     onPressed: () {
-            //         showSearch( context: context, delegate: PlayerSearch(soccerPlayers));
-            //     },
-            //     icon: Icon(Icons.search),
-            // ),
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: (){
@@ -44,12 +33,12 @@ class UserProductsScreen extends StatelessWidget {
         ),
         drawer: AppDrawer(),
         body: FutureBuilder(
-          future: _refreshProducts(context,"",(customer.customerActive==null)?'0':customer.customerActive.idLista),
+          future: _refreshProducts(context,"",(customer.customerActive==null)?'0':customer.customerActive.idLista,(customer.customerActive==null)?'0':customer.customerActive.id ),
           builder: (ctx, snapshot) =>
           snapshot.connectionState == ConnectionState.waiting ?
           Center(child: CircularProgressIndicator(),) :
           RefreshIndicator(
-            onRefresh: () => _refreshProducts(context,"",(customer.customerActive==null)?'0':customer.customerActive.idLista),
+            onRefresh: () => _refreshProducts(context,"",(customer.customerActive==null)?'0':customer.customerActive.idLista,(customer.customerActive==null)?'0':customer.customerActive.id ),
             child: Consumer<Products>(
               builder: (ctx, productsData, _) => Padding(
                 padding: EdgeInsets.all(8),

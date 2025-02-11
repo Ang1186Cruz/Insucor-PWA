@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_shop_app/providers/orders.dart';
 import 'package:http/http.dart' as http;
 import './cart.dart';
+import './routes.dart';
 
 class DeliveryItem {
   final String idEntrega;
@@ -77,16 +78,18 @@ class Deliverys with ChangeNotifier {
   }
 
   Future<void> addDelivery(int time, DateTime fechaInicio, DateTime fechaFin,
-      OrderItem order) async {
+      OrderItem order, String idRuta) async {
     String estadoEntrega = order.products.any((element) => element.todo != true)
         ? "PENDIENTE"
         : "COMPLETO";
-    List<CartItem> listCar=[];
+    List<CartItem> listCar = [];
     for (var i = 0; i < order.products.length; i++) {
       if (order.products[i].todo == true) {
         listCar.add(order.products[i]);
       }
     }
+    await Routes.UpdateRoute(idRuta);
+
     final url = 'https://distribuidorainsucor.com/APP_Api/api/Entrega.php';
     final response = await http.post(Uri.parse(url),
         body: json.encode({
@@ -96,13 +99,16 @@ class Deliverys with ChangeNotifier {
           'fechaFin': fechaFin.toString(),
           'timeE': time,
           'estadoEntrega': estadoEntrega,
-          'detalle': listCar.map((e) => {
-                'idProducto': e.id,
-                'cantidad': e.quantity,
-                'precio': e.price,
-                'estadoMotivo': e.motivo,
-                'detalleMotivo': e.descripcion
-              }).toList(),
+          'idRuta': idRuta,
+          'detalle': listCar
+              .map((e) => {
+                    'idProducto': e.id,
+                    'cantidad': e.quantity,
+                    'precio': e.price,
+                    'estadoMotivo': e.motivo,
+                    'detalleMotivo': e.descripcion
+                  })
+              .toList(),
         }));
     notifyListeners();
   }

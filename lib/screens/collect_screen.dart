@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_shop_app/providers/customers.dart';
@@ -8,6 +5,7 @@ import 'package:flutter_shop_app/providers/products.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../providers/cobros.dart' show Cobros;
+import 'package:flutter_shop_app/providers/auth.dart';
 
 class CollectScreen extends StatefulWidget {
   static const routeName = '/collect';
@@ -18,6 +16,7 @@ class CollectScreen extends StatefulWidget {
 class _CollectScreenState extends State<CollectScreen> {
   var _isInit = true;
   var _isLoading = false;
+  var nroComprobante = '';
   @override
   void initState() {
     super.initState();
@@ -26,20 +25,14 @@ class _CollectScreenState extends State<CollectScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setState(() {
-        _isLoading = false;
-      });
-      // Provider.of<Customers>(context).addFactura().then((_) {
-      //   setState(() {
-      //     _isLoading = false;
-      //   });
-     // });
+      nroComprobante = ModalRoute.of(context).settings.arguments as String;
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
   GlobalKey<FormState> keyForm = new GlobalKey();
+  TextEditingController edosMil = new TextEditingController();
   TextEditingController eMil = new TextEditingController();
   TextEditingController eQuinientos = new TextEditingController();
   TextEditingController eDocientos = new TextEditingController();
@@ -65,16 +58,21 @@ class _CollectScreenState extends State<CollectScreen> {
   TextEditingController tEfectivo = new TextEditingController();
   TextEditingController tCheque = new TextEditingController();
   TextEditingController tRecibido = new TextEditingController();
-  TextEditingController numFacturaC = new TextEditingController();
-  //String numFactura = "";
+  bool notControl = false;
+  String _numFactura = "";
 
   @override
   Widget build(BuildContext context) {
     final customers = Provider.of<Customers>(context, listen: false);
+    if (this.nroComprobante != '') {
+      _numFactura = nroComprobante;
+    } else {
+      _numFactura = customers.customerActive.facturadropdownItems.first;
+    }
     return MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-          backgroundColor: Colors.amber,
+          backgroundColor: Colors.blue,
           title: new Text('Cobro'),
           actions: <Widget>[
             Container(
@@ -82,8 +80,7 @@ class _CollectScreenState extends State<CollectScreen> {
                 icon: Icon(Icons.arrow_back_outlined),
                 tooltip: 'VOLVER',
                 onPressed: () {
-                  Navigator.pop(
-                      context); //of(context).pushReplacementNamed('/');
+                  Navigator.pop(context);
                 },
               ),
             ),
@@ -91,96 +88,96 @@ class _CollectScreenState extends State<CollectScreen> {
         ),
         body: new SingleChildScrollView(
           child: new Container(
-            child: _isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Form(
-                      key: keyForm,
-                      child: Column(
-                        children: [
-                          Title(
-                              color: Colors.amber,
-                              child: Text(
-                                "Nombre Cliente \n" +
-                                    customers.customerActive.nombre,
-                                style: TextStyle(color: Colors.black),
-                              )),
-                          formItemsDesign(TextFormField(
-                              decoration: InputDecoration(labelText: "Facturar a Cobrar"),
-                              controller: numFacturaC,
-                              // onChanged: (String value) {
-                              //   setState(() {
-                              //     recalcularEfectivo();
-                              //   });
-                              // }
-                              validator: validateName,
-                              )
-                              ), 
-
-                          // formItemsDesign(DropdownButtonFormField(
-                          //   isExpanded: true,
-                          //   decoration:
-                          //       InputDecoration(labelText: "Facturar a Cobrar"),
-                          //   value: numFactura,
-                          //   items:
-                          //       customers.customerActive.facturadropdownItems,
-                          //   onChanged: (String value) {
-                          //     setState(() {
-                          //       numFactura = value;
-                          //     });
-                          //   },
-                          //   validator: validateName,
-                          // )),
-
-                          Row(
-                            children: <Widget>[
-                              Flexible(
-                                fit: FlexFit.loose,
-                                child: new Column(
-                                  children: <Widget>[
-                                    new Text("EFECTIVO ",
-                                        textAlign: TextAlign.center),
-                                    formEfectivo(),
-                                  ],
-                                ),
-                              ),
-                              Padding(padding: const EdgeInsets.all(8.0)),
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: new Column(
-                                  children: <Widget>[
-                                    new Text("CHEQUES ",
-                                        textAlign: TextAlign.center),
-                                    formUIcheques(numero1, importe1),
-                                    formUIcheques(numero2, importe2),
-                                    formUIcheques(numero3, importe3),
-                                    formUIcheques(numero4, importe4),
-                                    formUIcheques(numero5, importe5),
-                                    formUIcheques(numero6, importe6),
-                                    TextField(
-                                      controller: comentario,
-                                      decoration: InputDecoration(
-                                        labelText: 'COMENTARIO',
-                                      ),
-                                      keyboardType: TextInputType.multiline,
-                                      textInputAction: TextInputAction.newline,
-                                      minLines: 1,
-                                      maxLines: 5,
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new Form(
+                        key: keyForm,
+                        child: Column(
+                          children: [
+                            Title(
+                                color: Colors.amber,
+                                child: Text(
+                                  "Nombre Cliente \n" +
+                                      customers.customerActive.nombre,
+                                  style: TextStyle(color: Colors.black),
+                                )),
+                            formItemsDesign(
+                              DropdownButtonFormField(
+                                disabledHint: Text(_numFactura),
+                                value: _numFactura,
+                                isExpanded: true,
+                                onChanged: (this.nroComprobante != '')
+                                    ? null
+                                    : (value) {
+                                        setState(() {
+                                          _numFactura = value;
+                                        });
+                                      },
+                                items: customers
+                                    .customerActive.facturadropdownItems
+                                    .map((String val) {
+                                  return DropdownMenuItem(
+                                    value: val,
+                                    child: Text(
+                                      val,
                                     ),
-                                  ],
-                                ),
+                                  );
+                                }).toList(),
                               ),
-                            ],
-                          ),
-                          formFooter(),
-                        ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Text("EFECTIVO ",
+                                          textAlign: TextAlign.center),
+                                      formEfectivo(),
+                                    ],
+                                  ),
+                                ),
+                                Padding(padding: const EdgeInsets.all(8.0)),
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Text("CHEQUES ",
+                                          textAlign: TextAlign.center),
+                                      formUIcheques(numero1, importe1),
+                                      formUIcheques(numero2, importe2),
+                                      formUIcheques(numero3, importe3),
+                                      formUIcheques(numero4, importe4),
+                                      formUIcheques(numero5, importe5),
+                                      formUIcheques(numero6, importe6),
+                                      TextField(
+                                        controller: comentario,
+                                        decoration: InputDecoration(
+                                          labelText: 'COMENTARIO',
+                                        ),
+                                        keyboardType: TextInputType.multiline,
+                                        textInputAction:
+                                            TextInputAction.newline,
+                                        minLines: 1,
+                                        maxLines: 5,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            formFooter(),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-          ),
+                    )
+              //     }
+              // }
+              ),
         ),
       ),
     );
@@ -223,6 +220,15 @@ class _CollectScreenState extends State<CollectScreen> {
           controller: tRecibido,
           validator: validateName,
         )),
+        formItemsDesign(CheckboxListTile(
+          title: Text('MONTO NO CONTROLADO'),
+          value: notControl,
+          onChanged: (newValue) {
+            setState(() {
+              notControl = newValue;
+            });
+          },
+        )),
         GestureDetector(
             onTap: () {
               save();
@@ -234,10 +240,9 @@ class _CollectScreenState extends State<CollectScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
                 gradient: LinearGradient(colors: [
-                  Color(0xFFFBC02D),
-                  //Color(0xFF0EDED2),
-                  //Color(0xFF03A0FE),
-                  Color(0xFFF9A825),
+                  Colors.blue
+                  // Color.fromARGB(255, 45, 144, 251),
+                  // Color(0xFFF9A825),
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               child: Text("Guardar",
@@ -254,6 +259,18 @@ class _CollectScreenState extends State<CollectScreen> {
   Widget formEfectivo() {
     return Column(
       children: <Widget>[
+        TextField(
+            decoration: InputDecoration(labelText: "\$ 2000"),
+            controller: edosMil,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            onChanged: (String value) {
+              setState(() {
+                recalcularEfectivo();
+              });
+            }),
         TextField(
             decoration: InputDecoration(labelText: "\$ 1000"),
             controller: eMil,
@@ -356,9 +373,18 @@ class _CollectScreenState extends State<CollectScreen> {
           child: TextFormField(
               decoration: InputDecoration(labelText: "importe"),
               controller: importe,
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
+              keyboardType:
+                  TextInputType.numberWithOptions(decimal: true, signed: false),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  try {
+                    final text = newValue.text;
+                    if (text.isNotEmpty) double.parse(text);
+                    return newValue;
+                  } catch (e) {}
+                  return oldValue;
+                }),
               ],
               onChanged: (String value) {
                 setState(() {
@@ -374,7 +400,9 @@ class _CollectScreenState extends State<CollectScreen> {
     if (iRecibido.text.isNotEmpty && iRecibido.text != '0') {
       tEfectivo.text = iRecibido.text;
     } else {
-      tEfectivo.text = (int.parse(eMil.text.isEmpty ? '0' : eMil.text) * 1000 +
+      tEfectivo.text = (int.parse(edosMil.text.isEmpty ? '0' : edosMil.text) *
+                  2000 +
+              int.parse(eMil.text.isEmpty ? '0' : eMil.text) * 1000 +
               int.parse(eQuinientos.text.isEmpty ? '0' : eQuinientos.text) *
                   500 +
               int.parse(eDocientos.text.isEmpty ? '0' : eDocientos.text) * 200 +
@@ -413,12 +441,14 @@ class _CollectScreenState extends State<CollectScreen> {
   }
 
   save() {
+    final auth = Provider.of<Auth>(context, listen: false);
     final customer = Provider.of<Customers>(context, listen: false);
     final product = Provider.of<Products>(context, listen: false);
-
-    if (keyForm.currentState.validate()) {
-
+    final listNum = _numFactura.split("|");
+    String numeroFact = listNum[0];
+    if (keyForm.currentState.validate() && numeroFact != '') {
       if (iRecibido.text.isNotEmpty && iRecibido.text != '0') {
+        edosMil.text = '0';
         eMil.text = '0';
         eQuinientos.text = '0';
         eDocientos.text = '0';
@@ -429,7 +459,8 @@ class _CollectScreenState extends State<CollectScreen> {
       }
       Provider.of<Cobros>(context, listen: false).addCobro(
           customer.customerActive.id,
-          numFacturaC.text,
+          numeroFact,
+          edosMil.text,
           eMil.text,
           eQuinientos.text,
           eDocientos.text,
@@ -453,7 +484,9 @@ class _CollectScreenState extends State<CollectScreen> {
           iRecibido.text,
           tEfectivo.text,
           tCheque.text,
-          tRecibido.text);
+          tRecibido.text,
+          ((auth.operation == 'ruta') ? auth.IdRuta : ''),
+          notControl);
       setState(() {});
       Alert(
         context: context,
@@ -478,5 +511,3 @@ class _CollectScreenState extends State<CollectScreen> {
     }
   }
 }
-
-

@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shop_app/screens/products_overview_screen.dart';
 import '../providers/orders.dart' as ord;
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import '../screens/entrega_screen.dart';
+import 'package:whatsapp/whatsapp.dart';
 
 class OrderItem extends StatefulWidget {
   final ord.OrderItem order;
@@ -22,8 +22,19 @@ class OrderItem extends StatefulWidget {
 }
 
 class _OrderItemState extends State<OrderItem> {
+  WhatsApp whatsapp = WhatsApp();
   var _expanded = false;
   int length = 0;
+
+  @override
+  void initState() {
+    whatsapp.setup(
+      accessToken:
+          "EAADDo3arTVQBAOwsNmQumv4rH8SgZCsSN2F4joT4Odkcn7Yl8Hrao8l4JoEMc8GY39MxVMf4931s3FJMWgTu0BzUmbgVx8uHPbfbm8OG2NlFHiuBm0gKO24GXJWebNZBADXmDOdIDLGcyE5TF2PkKPjsGxzvnc4zZBUE7bM1ZCV5rMMy4b8DZBG8f51g5UoPBZCmdBofJ8tQZDZD",
+      fromNumberId: 111582558617719,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,21 +64,28 @@ class _OrderItemState extends State<OrderItem> {
     return search
         ? AnimatedContainer(
             duration: Duration(milliseconds: 40),
-            height: _expanded ? 500 : 95,
+            height: _expanded ? 500 : 120,
             child: Card(
               margin: EdgeInsets.all(2),
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text("(" +
-                        widget.order.codigo +
-                        ") " +
-                        widget.order.nameCustommer),
+                    title: Text(
+                        "(" +
+                            widget.order.codigo +
+                            ") " +
+                            widget.order.nameCustommer,
+                        style: TextStyle(color: Colors.blue)),
                     // visualDensity: VisualDensity(vertical: 10),
-                    subtitle: Text(widget.order.transportista +
-                        " - " +
-                        DateFormat("dd/MM/yyyy HH:mm")
-                            .format(widget.order.fecha)),
+                    subtitle: Text(
+                        widget.order.transportista +
+                            " " +
+                            DateFormat("dd/MM/yyyy HH:mm")
+                                .format(widget.order.fecha) +
+                            "\n " +
+                            NumberFormat.simpleCurrency().format(montoTotal),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black)),
                     trailing: Container(
                         width: 120,
                         child: Row(children: <Widget>[
@@ -121,8 +139,10 @@ class _OrderItemState extends State<OrderItem> {
                                   "https://distribuidorainsucor.com/tuPedido.php?id=" +
                                       widget.order.idOrder;
                               (auth.operation == 'entrega') ? null : null;
-                              FlutterOpenWhatsapp.sendSingleMessage(
-                                  "54" + widget.order.telefono, url);
+                              whatsapp.messagesText(
+                                  to: int.parse("54" + widget.order.telefono),
+                                  message: url,
+                                  previewUrl: true);
                             },
                           ),
                         ])),

@@ -1,15 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 class CartItem {
   final int idPedidP;
   final String id;
   final String title;
-   int quantity;
+  int quantity;
   final double price;
   final double priceRequested;
   String descripcion;
   bool todo;
   String motivo;
+  int cantidadPreparada;
+  bool controlado;
+  bool preparado;
+  bool retiroDespacho;
+  bool camaraFriogorifico;
+  TextEditingController inputCantidadPrepa; //= TextEditingController();
 
   CartItem(
       {this.idPedidP,
@@ -20,7 +27,13 @@ class CartItem {
       this.priceRequested,
       this.descripcion,
       this.todo = false,
-      this.motivo='completo'});
+      this.motivo = 'completo',
+      this.cantidadPreparada,
+      this.controlado,
+      this.preparado = false,
+      this.retiroDespacho = false,
+      this.camaraFriogorifico = false,
+      this.inputCantidadPrepa});
 }
 
 class Cart with ChangeNotifier {

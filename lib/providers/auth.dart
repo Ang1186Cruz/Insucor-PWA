@@ -9,8 +9,10 @@ class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
   String _userId;
+  String _rolId;
   Timer _authTimer;
   String _operation;
+  String _idRuta = '';
   bool splash = true;
 
   bool get IsDplash {
@@ -34,6 +36,14 @@ class Auth with ChangeNotifier {
     return _userId;
   }
 
+  String get rolId {
+    return _rolId;
+  }
+
+  String get IdRuta {
+    return _idRuta;
+  }
+
   String get operation {
     return _operation;
   }
@@ -44,6 +54,10 @@ class Auth with ChangeNotifier {
 
   void setOperacion(String valor) {
     _operation = valor;
+  }
+
+  void setIdRuta(String idRuta) {
+    _idRuta = idRuta;
   }
 
   Future<void> _authenticate(
@@ -57,7 +71,9 @@ class Auth with ChangeNotifier {
         throw HttpException(responseData['error']['message']);
       }
       _token = responseData['idToken'];
+      _rolId = responseData['rolId'];
       _userId = responseData['localId'];
+
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(responseData['expiresIn'])));
       _autoLogout();
@@ -66,6 +82,7 @@ class Auth with ChangeNotifier {
       final userData = json.encode({
         'token': _token,
         'userId': _userId,
+        'rolId': _rolId,
         'expiryDate': _expiryDate.toIso8601String()
       });
       setOperacion('pedido');
@@ -98,6 +115,7 @@ class Auth with ChangeNotifier {
 
     _token = extractedUserData['token'];
     _userId = extractedUserData['userId'];
+    _rolId = extractedUserData['rolId'];
     _expiryDate = expiryDate;
     notifyListeners();
     _autoLogout();

@@ -13,7 +13,7 @@ import 'package:flutter_shop_app/providers/message.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-//import '../providers/cobros.dart' show Cobros;
+import 'package:flutter_shop_app/providers/auth.dart';
 
 class EntregaScreen extends StatefulWidget {
   static const routeName = '/entrega';
@@ -95,9 +95,14 @@ class _EntregaScreenState extends State<EntregaScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        FlatButton(
-                          color: Colors.redAccent,
-                          padding: EdgeInsets.all(15),
+                        TextButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.redAccent),
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.all(15))),
+                          // color: Colors.redAccent,
+                          // padding: EdgeInsets.all(15),
                           child: _isLoading
                               ? Text("Entregando..")
                               : Text("INICIAR ENTREGA"),
@@ -112,9 +117,14 @@ class _EntregaScreenState extends State<EntregaScreen> {
                                 },
                         ),
                         Padding(padding: const EdgeInsets.all(8.0)),
-                        FlatButton(
-                          color: Colors.greenAccent,
-                          padding: EdgeInsets.all(15),
+                        TextButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.greenAccent),
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.all(15))),
+                          // color: Colors.greenAccent,
+                          // padding: EdgeInsets.all(15),
                           child: Text("FINALIZAR ENTREGA"),
                           onPressed: () async {
                             _timer.cancel();
@@ -424,6 +434,7 @@ class _EntregaScreenState extends State<EntregaScreen> {
   }
 
   save(OrderItem orderr) async {
+    final auth = Provider.of<Auth>(context, listen: false);
     bool validar = false;
     for (var i = 0; i < orderr.products.length; i++) {
       if (orderr.products[i].todo == true) {
@@ -432,11 +443,16 @@ class _EntregaScreenState extends State<EntregaScreen> {
     }
 
     if (validar) {
-      await Provider.of<Deliverys>(context, listen: false)
-          .addDelivery(_time, fechaInicio, fechafin, orderr);
+      await Provider.of<Deliverys>(context, listen: false).addDelivery(
+          _time,
+          fechaInicio,
+          fechafin,
+          orderr,
+          ((auth.operation == 'ruta') ? auth.IdRuta : ''));
       setState(() {
         _isLoading = false;
       });
+
       Alert(
         context: context,
         type: AlertType.success,
@@ -453,7 +469,7 @@ class _EntregaScreenState extends State<EntregaScreen> {
               Provider.of<Orders>(context, listen: false).clearOrderActive();
               Provider.of<Customers>(context, listen: false).clearCustomer("");
               Provider.of<Products>(context, listen: false).clearProducts();
-              
+
               Navigator.of(context).pushReplacementNamed('/');
             },
             width: 120,

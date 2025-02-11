@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
+import '../main.dart';
 import '../screens/orders_screen.dart';
 import '../providers/deliverys.dart' show Deliverys;
 import '../widgets/delivery_item.dart';
@@ -32,18 +33,16 @@ class _DeliverysScreenState extends State<DeliverysScreen> {
       appBar: AppBar(
         title: Text("Mis Entregas"),
         actions: <Widget>[
-            Container(
-              child: 
-                IconButton(
-                  icon: Icon(Icons.add_box_rounded),
-                  tooltip: 'NUEVA ENTREGA',
-                  onPressed: () {
-                     Navigator.of(context)
-                  .pushReplacementNamed(OrdersScreen.routeName);
-                  },
-                ),
+          Container(
+            child: IconButton(
+              icon: Icon(Icons.add_box_rounded),
+              tooltip: 'NUEVA ENTREGA',
+              onPressed: () {
+                Navigator.of(context).pushNamed(OrdersScreen.routeName);
+              },
             ),
-          ],
+          ),
+        ],
       ),
       drawer: AppDrawer(),
       body: Container(
@@ -52,17 +51,13 @@ class _DeliverysScreenState extends State<DeliverysScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                style: TextStyle(color: Colors.white),
                 onChanged: (value) {
                   setState(() {
                     _searchName = value;
                   });
                 },
-                decoration: InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+                decoration: MyApp().inputDecorationCustom(),
               ),
             ),
             Expanded(

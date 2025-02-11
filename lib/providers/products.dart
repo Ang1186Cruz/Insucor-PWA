@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/models/http_exception.dart';
 import 'package:http/http.dart' as http;
@@ -37,8 +38,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProduct(
-      String idLista, Map<String, CartItem> itemsCard) async {
-
+      String idLista, Map<String, CartItem> itemsCard, String idCliente) async {
     List<String> listaProducto = [];
     if (itemsCard != null) {
       itemsCard.forEach((key, value) {
@@ -48,11 +48,13 @@ class Products with ChangeNotifier {
     if (_items.length == 0) {
       var url =
           'https://distribuidorainsucor.com/APP_Api/api/productos.php?idLista=' +
-              idLista;
+              idLista +
+              "&idCliente=" +
+              idCliente;
       try {
         final response = await http.get(Uri.parse(url));
         List<Product> loadedProducts = (json.decode(response.body) as List)
-            .map((e) => new Product.fromJson(e,listaProducto))
+            .map((e) => new Product.fromJson(e, listaProducto))
             .toList();
         _items = loadedProducts;
         notifyListeners();

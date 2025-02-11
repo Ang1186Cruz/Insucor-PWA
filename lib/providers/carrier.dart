@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CarrierOne with ChangeNotifier {
-  final String id;
+  final int id;
   final String nombre;
   bool isAgregate;
 
@@ -16,7 +16,7 @@ class CarrierOne with ChangeNotifier {
 
   factory CarrierOne.fromJson(Map<String, dynamic> parseJson) {
     return CarrierOne(
-      id: parseJson['id'],
+      id: int.parse(parseJson['idTransportista'] ?? "0"),
       nombre: parseJson['nombre'],
     );
   }
@@ -29,19 +29,23 @@ class Carriers with ChangeNotifier {
   List<CarrierOne> _items = [];
 
   List<CarrierOne> get items {
-    addCarrier();
     return [..._items];
   }
-  void addCarrier() {
-    if (_items.length == 0) {
-      _items.add(new CarrierOne(id: '1', nombre: 'Mostrador'));
-      _items.add(new CarrierOne(id: '4', nombre: 'Astrada Armando'));
-      _items.add(new CarrierOne(id: '8', nombre: 'Echenique Juan'));
-      _items.add(new CarrierOne(id: '9', nombre: 'Sciutto Mauro'));
-      _items.add(new CarrierOne(id: '11', nombre: 'Molinari Matias'));
-      _items.add(new CarrierOne(id: '12', nombre: 'Cisneros Leonardo'));
-      _items.add(new CarrierOne(id: '14', nombre: 'Miranda Nicolas'));
+
+  Future<void> fetchAndSetCarrier() async {
+    _items = [];
+    final url =
+        'https://distribuidorainsucor.com/APP_Api/api/transportistas.php';
+    try {
+      final response = await http.get(Uri.parse(url));
+      List<CarrierOne> loadedCarrier = (json.decode(response.body) as List)
+          .map((e) => new CarrierOne.fromJson(e))
+          .toList();
+      _items = loadedCarrier.toList();
+      notifyListeners();
+    } catch (exception) {
+      print("NO hay información: " + exception.toString());
+      throw exception;
     }
   }
-
 }

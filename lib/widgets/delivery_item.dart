@@ -44,17 +44,20 @@ class _DeliveryItemState extends State<DeliveryItem> {
             duration: Duration(milliseconds: 400),
             height: _expanded
                 ? 500 
-                : 95,
+                : 120,
             child: Card(
               margin: EdgeInsets.all(10),
               child: Column(
                 children: <Widget>[
                   ListTile(
                     title: Text(
-                        widget.delivery.nombre),
+                        widget.delivery.nombre,
+                        style: TextStyle(color: Colors.blue)),
                     // visualDensity: VisualDensity(vertical: 10),
                      subtitle: Text(DateFormat("dd/MM/yyyy HH:mm")
-                             .format(widget.delivery.fechaAlta)),
+                             .format(widget.delivery.fechaAlta),
+                             style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black)),
                     trailing: Container(
                         width: 100,
                         child: Row(children: <Widget>[

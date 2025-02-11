@@ -3,7 +3,6 @@ import 'package:flutter_shop_app/providers/products.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_shop_app/providers/cart.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CartItem extends StatelessWidget {
@@ -23,7 +22,7 @@ class CartItem extends StatelessWidget {
     final products = Provider.of<Products>(context, listen: false);
     final myController = TextEditingController();
     final myControllerSolicitado = TextEditingController();
-    
+
     myController.text = quantity.toString();
     myControllerSolicitado.text = priceRequested.toString();
     return Dismissible(
@@ -47,13 +46,13 @@ class CartItem extends StatelessWidget {
             title: Text('Esta Seguro!'),
             content: Text('¿Quieres eliminar el artículo del carrito?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text('No'),
                 onPressed: () {
                   Navigator.of(innerContext).pop(false);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text("Si"),
                 onPressed: () {
                   Navigator.of(innerContext).pop(true);
@@ -65,7 +64,6 @@ class CartItem extends StatelessWidget {
       },
       onDismissed: (direction) {
         products.removeIsAgregate(productId);
-        //Provider.of<Products>(context, listen: false).removeIsAgregate(productId);
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       child: Card(
@@ -99,7 +97,7 @@ class CartItem extends StatelessWidget {
                           ),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
-                             FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                         ),
                         TextField(
@@ -117,8 +115,13 @@ class CartItem extends StatelessWidget {
                     buttons: [
                       DialogButton(
                         onPressed: () {
-                          cart.addItem(productId, price, title,
-                              myController.text, myControllerSolicitado.text,0);
+                          cart.addItem(
+                              productId,
+                              price,
+                              title,
+                              myController.text,
+                              myControllerSolicitado.text,
+                              0);
                           Navigator.pop(context);
                         },
                         child: Text("EDIT"),

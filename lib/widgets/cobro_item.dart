@@ -30,9 +30,7 @@ class _CobroItemState extends State<CobroItem> {
     return search
         ? AnimatedContainer(
             duration: Duration(milliseconds: 400),
-            height: _expanded
-                ? 500 //min(widget.order.products.length * 20.0 + 150, 200)
-                : 95,
+            height: 130,
             child: Card(
               margin: EdgeInsets.all(10),
               child: Column(
@@ -43,12 +41,15 @@ class _CobroItemState extends State<CobroItem> {
                         widget.cobro.noFactura +
                         ") " +
                         widget.cobro.nombre),
-                    subtitle: Text("Total Efectivo.: " +
-                widget.cobro.totalEfectivo.toString() +
-                "\ntotal Cheque: " +
-                widget.cobro.totalCheque.toString()+
-                "\ntotal : " +
-                widget.cobro.totalRecibido.toString()),
+                    subtitle: Text("Fecha Cobro: " +
+                    DateFormat("dd/MM/yyyy")
+                             .format(widget.cobro.fechaCobro)+
+                "\nTotal Efectivo.: " +
+                NumberFormat.simpleCurrency().format(widget.cobro.totalEfectivo) +
+                "\nTotal Cheques: " +
+                NumberFormat.simpleCurrency().format(widget.cobro.totalCheque) +
+                "\nEntrega Total : " +
+                NumberFormat.simpleCurrency().format(widget.cobro.totalRecibido)),
                 
                  ), 
                 ],
@@ -59,15 +60,3 @@ class _CobroItemState extends State<CobroItem> {
   }
 }
 
-// void reloadCard(
-//     BuildContext context, List<CartItem> _items, ord.OrderItem order) {
-//   // primero limpio todo
-//   Provider.of<Customers>(context, listen: false).clearCustomer(order.codigo);
-//   Provider.of<Products>(context, listen: false).clearProducts();
-//   Provider.of<Cart>(context, listen: false).clearCart();
-//   Provider.of<Cart>(context, listen: false).addCart(_items);
-//   Provider.of<ord.Orders>(context, listen: false).addOrderModificad(order);
-
-//   // recargo customer Productos
-//   Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
-// }

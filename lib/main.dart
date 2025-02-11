@@ -1,12 +1,22 @@
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shop_app/constants.dart';
 import 'package:flutter_shop_app/helpers/custom_route.dart';
+import 'package:flutter_shop_app/providers/carrier.dart';
 import 'package:flutter_shop_app/providers/customers.dart';
+import 'package:flutter_shop_app/providers/event.dart';
+import 'package:flutter_shop_app/providers/infoDashboard.dart';
+import 'package:flutter_shop_app/providers/note_orders.dart';
+import 'package:flutter_shop_app/providers/spend.dart';
 import 'package:flutter_shop_app/screens/cobro_screen.dart';
 import 'package:flutter_shop_app/screens/delivery_screen.dart';
 import 'package:flutter_shop_app/screens/edit_customers_screen.dart';
 import 'package:flutter_shop_app/screens/entrega_screen.dart';
+import 'package:flutter_shop_app/screens/main_screen.dart';
+import 'package:flutter_shop_app/screens/note_orders_screen.dart';
+import 'package:flutter_shop_app/screens/productCalendar.dart';
+import 'package:flutter_shop_app/screens/routes_screen.dart';
+import 'package:flutter_shop_app/screens/spend_screen.dart';
 import './screens/products_overview_screen.dart';
 import './screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +33,12 @@ import './providers/orders.dart';
 import './providers/products.dart';
 import './providers/deliverys.dart';
 import './providers/cobros.dart';
+import './providers/carrier.dart';
 import './screens/product_detail_screen.dart';
 import './screens/customers_screen.dart';
 import './screens/delivery_screen.dart';
+import './providers/routes.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,9 +63,20 @@ class MyApp extends StatelessWidget {
           update: (_, auth, previousOrders) => Orders(auth.token, auth.userId,
               previousOrders == null ? [] : previousOrders.orders),
         ),
+        ChangeNotifierProxyProvider<Auth, Events>(
+          create: null,
+          update: (_, auth, previousOrders) => Events(auth.token, auth.userId),
+        ),
+        ChangeNotifierProxyProvider<Auth, NoteOrders>(
+          create: null,
+          update: (_, auth, previousInfoListDashboard) =>
+              NoteOrders(auth.token, auth.userId, auth.rolId),
+        ),
         ChangeNotifierProxyProvider<Auth, Deliverys>(
           create: null,
-          update: (_, auth, previousDeliverys) => Deliverys(auth.token, auth.userId,
+          update: (_, auth, previousDeliverys) => Deliverys(
+              auth.token,
+              auth.userId,
               previousDeliverys == null ? [] : previousDeliverys.deliverys),
         ),
         ChangeNotifierProxyProvider<Auth, Cobros>(
@@ -60,69 +84,116 @@ class MyApp extends StatelessWidget {
           update: (_, auth, previousCobros) => Cobros(auth.token, auth.userId,
               previousCobros == null ? [] : previousCobros.cobros),
         ),
+        ChangeNotifierProxyProvider<Auth, Carriers>(
+          create: null,
+          update: (_, auth, previousCarriers) => Carriers(
+              auth.token,
+              auth.userId,
+              previousCarriers == null ? [] : previousCarriers.items),
+        ),
+        ChangeNotifierProxyProvider<Auth, Spends>(
+          create: null,
+          update: (_, auth, previousSpends) => Spends(auth.token, auth.userId),
+        ),
+        ChangeNotifierProxyProvider<Auth, Routes>(
+          create: null,
+          update: (_, auth, previousRoutes) => Routes(auth.token, auth.userId,
+              previousRoutes == null ? [] : previousRoutes.routes),
+        ),
+        ChangeNotifierProxyProvider<Auth, InfoListDashboard>(
+          create: null,
+          update: (_, auth, previousInfoListDashboard) =>
+              InfoListDashboard(auth.token, auth.userId, auth.rolId),
+        ),
         ChangeNotifierProxyProvider<Auth, Customers>(
           create: null,
-          update: (_, auth, previousCustomers) => Customers(auth.token, auth.userId,
+          update: (_, auth, previousCustomers) => Customers(
+              auth.token,
+              auth.userId,
               previousCustomers == null ? [] : previousCustomers.items),
         ),
-
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) {
           return MaterialApp(
-            localizationsDelegates: [
-                GlobalMaterialLocalizations.delegate
-              ],
-              supportedLocales: [
-                const Locale('es')
-              ],
+            localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+            supportedLocales: [const Locale('es', 'ES')],
             title: 'Mi Tienda',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: Colors.amber, 
-              accentColor: Colors.green,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-              fontFamily: 'Lato',
-              pageTransitionsTheme: PageTransitionsTheme(
-                builders: {
+                //  primarySwatch: Colors.amber,
+                textTheme: TextTheme(
+                  titleLarge: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    //color: Colors.white
+                  ),
+                  titleMedium: TextStyle(
+                    fontSize: 16.0,
+                    //fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white
+                  ),
+                  bodyMedium: TextStyle(
+                    fontSize: 12.0, fontFamily: 'Hind',
+                    //color: Colors.white
+                  ),
+                ),
+                scaffoldBackgroundColor: bgColor,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                fontFamily: 'Lato',
+                pageTransitionsTheme: PageTransitionsTheme(builders: {
                   TargetPlatform.android: CustomPageTransitionBuilder(),
                   TargetPlatform.iOS: CustomPageTransitionBuilder(),
-                }
-              )
-            ),
-            home: auth.isAuth?
-               CustomersScreen() //ProductsOverviewScreen()
-                :  //AuthScreen(),//SplashScreen(auth),
+                })),
+            home: auth.isAuth
+                ? MainScreen()
+                //CustomersScreen() //ProductsOverviewScreen()
+                : //AuthScreen(),//SplashScreen(auth),
 
-                 FutureBuilder(
-                     future: auth.tryAutoLogin(),
-                      builder: (ctx, authResultSnapshot) =>
-                         auth.splash
-                             ? SplashScreen(auth)
-                             : AuthScreen(),
-                    //  builder: (ctx, authResultSnapshot) =>
-                    //      authResultSnapshot.connectionState ==
-                    //              ConnectionState.waiting
-                    //          ? SplashScreen(auth)
-                    //          : AuthScreen(),
-                   ),
-
+                FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (ctx, authResultSnapshot) =>
+                        auth.splash ? SplashScreen(auth) : AuthScreen(),
+                  ),
             routes: {
-              ProductsOverviewScreen.routeName:(_) => ProductsOverviewScreen(),
+              CustomersScreen.routeName: (_) => CustomersScreen(),
+              ProductsOverviewScreen.routeName: (_) => ProductsOverviewScreen(),
               ProductDetailScreen.routeName: (_) => ProductDetailScreen(),
               CartScreen.routeName: (_) => CartScreen(),
               OrdersScreen.routeName: (_) => OrdersScreen(),
+              NoteOrdersScreen.routeName: (_) => NoteOrdersScreen(),
+              ProductCalendarScreen.routeName: (_) => ProductCalendarScreen(),
               UserProductsScreen.routeName: (_) => UserProductsScreen(),
               EditProductScreen.routeName: (_) => EditProductScreen(),
-              EditcustomerScreen.routeName:(_) => EditcustomerScreen(),
-              DeliverysScreen.routeName:(_)=> DeliverysScreen(),
-              CobrosScreen.routeName:(_)=> CobrosScreen(),
-              CollectScreen.routeName:(_)=> CollectScreen(),
-              EntregaScreen.routeName:(_)=> EntregaScreen(),
+              EditcustomerScreen.routeName: (_) => EditcustomerScreen(),
+              DeliverysScreen.routeName: (_) => DeliverysScreen(),
+              CobrosScreen.routeName: (_) => CobrosScreen(),
+              SpendScreen.routeName: (_) => SpendScreen(),
+              CollectScreen.routeName: (_) => CollectScreen(),
+              EntregaScreen.routeName: (_) => EntregaScreen(),
+              RoutesScreen.routeName: (_) => RoutesScreen(),
             },
           );
         },
       ),
     );
+  }
+
+  InputDecoration inputDecorationCustom() {
+    return InputDecoration(
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 1, color: Colors.white),
+            borderRadius: BorderRadius.all(Radius.circular(25.0))),
+        labelStyle: TextStyle(color: Colors.white),
+        labelText: "Search",
+        hintText: "Search",
+        prefixIcon: Icon(
+          Icons.search,
+          color: Colors.white,
+        ),
+        border: OutlineInputBorder(
+            borderSide: BorderSide(width: 1, color: Colors.white),
+            borderRadius: BorderRadius.all(Radius.circular(25.0))));
   }
 }

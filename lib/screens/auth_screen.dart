@@ -1,7 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/models/http_exception.dart';
+import 'package:flutter_shop_app/providers/carrier.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
@@ -23,11 +23,10 @@ class AuthScreen extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors:
-                     [
-                        Color.fromRGBO(254, 193, 77, 50).withOpacity(0.9),
-                        Color.fromRGBO(254, 193, 77, 50).withOpacity(0.9),
-                     ],
+                colors: [
+                  Color.fromRGBO(254, 193, 77, 50).withOpacity(0.9),
+                  Color.fromRGBO(254, 193, 77, 50).withOpacity(0.9),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 stops: [0, 1],
@@ -44,35 +43,37 @@ class AuthScreen extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                     child: Container(
-                    //  margin: EdgeInsets.only(bottom: 20.0),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
-                      // transform: Matrix4.rotationZ(-8 * pi / 180)
-                      //   ..translate(-10.0),
-                      // ..translate(-10.0),
-                      // decoration: BoxDecoration(
-                      //   borderRadius: BorderRadius.circular(20),
-                      //   color: Color.fromRGBO(254, 193, 77, 50).withOpacity(0.9),//Colors.deepOrangeAccent.shade100, // deepOrange.shade900,
-                      //   boxShadow: [
-                      //     BoxShadow(
-                      //       blurRadius: 8,
-                      //       color: Colors.black26,
-                      //       offset: Offset(0, 2),
-                      //     )
-                      //   ],
-                      // ),
-                      //child: new Image.asset('../assets/images/logoinsucor.png', height: 60.0, fit: BoxFit.cover,) 
-                      child: new Image.asset('./assets/images/logoinsucor.png',) 
-                      // Text(
-                      //   'INSUCOR',
-                      //   style: TextStyle(
-                      //     color: Colors.black,  //Theme.of(context).accentTextTheme.title.color,
-                      //     fontSize: 50,
-                      //     fontFamily: 'Anton',
-                      //     fontWeight: FontWeight.normal,
-                      //   ),
-                      // ),
-                    ),
+                        //  margin: EdgeInsets.only(bottom: 20.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 94.0),
+                        // transform: Matrix4.rotationZ(-8 * pi / 180)
+                        //   ..translate(-10.0),
+                        // ..translate(-10.0),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(20),
+                        //   color: Color.fromRGBO(254, 193, 77, 50).withOpacity(0.9),//Colors.deepOrangeAccent.shade100, // deepOrange.shade900,
+                        //   boxShadow: [
+                        //     BoxShadow(
+                        //       blurRadius: 8,
+                        //       color: Colors.black26,
+                        //       offset: Offset(0, 2),
+                        //     )
+                        //   ],
+                        // ),
+                        //child: new Image.asset('../assets/images/logoinsucor.png', height: 60.0, fit: BoxFit.cover,)
+                        child: new Image.asset(
+                          './assets/images/logoinsucor.png',
+                        )
+                        // Text(
+                        //   'INSUCOR',
+                        //   style: TextStyle(
+                        //     color: Colors.black,  //Theme.of(context).accentTextTheme.title.color,
+                        //     fontSize: 50,
+                        //     fontFamily: 'Anton',
+                        //     fontWeight: FontWeight.normal,
+                        //   ),
+                        // ),
+                        ),
                   ),
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
@@ -134,7 +135,7 @@ class _AuthCardState extends State<AuthCard>
         title: Text("And error occurred!"),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text("Okay"),
             onPressed: () => Navigator.of(ctx).pop(),
           ),
@@ -157,6 +158,8 @@ class _AuthCardState extends State<AuthCard>
         // Log user in
         await Provider.of<Auth>(context, listen: false)
             .login(_authData['email'], _authData['password']);
+        // await Provider.of<Carriers>(context, listen: false)
+        //     .fetchAndSetCarrier();
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false)
@@ -223,6 +226,7 @@ class _AuthCardState extends State<AuthCard>
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -236,6 +240,7 @@ class _AuthCardState extends State<AuthCard>
                   },
                 ),
                 TextFormField(
+                  style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   controller: _passwordController,
@@ -280,20 +285,22 @@ class _AuthCardState extends State<AuthCard>
                 if (_isLoading)
                   CircularProgressIndicator()
                 else
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.blue),
                     child:
                         //Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                         Text('LOGIN'),
                     onPressed: _submit,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(30),
+                    // ),
+                    // padding:
+                    //     EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                    // color: Theme.of(context).primaryColor,
+
+                    // textColor: Theme.of(context).primaryTextTheme.button.color,
                   ),
-                // FlatButton(
+                // TextButton(
                 //   child: Text(
                 //       '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                 //   onPressed: _switchAuthMode,

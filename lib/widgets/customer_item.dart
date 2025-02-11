@@ -4,6 +4,7 @@ import 'package:flutter_shop_app/providers/auth.dart';
 import 'package:flutter_shop_app/providers/products.dart';
 import 'package:flutter_shop_app/providers/cart.dart';
 import 'package:flutter_shop_app/providers/customers.dart';
+import 'package:flutter_shop_app/screens/customers_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shop_app/screens/products_overview_screen.dart';
 import '../screens/edit_customers_screen.dart';
@@ -17,14 +18,10 @@ class CustomerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<Auth>(context, listen: false);
-    //final cart = Provider.of<Cart>(context, listen: false);
     final customer = Provider.of<CustomerOne>(context, listen: false);
-    // if (customer.nombre == customer.) {
-    //   customer.isAgregate = true;
-    // }
     return new Column(children: <Widget>[
       new Container(
-          height: 95,
+          height: 120,
           width: MediaQuery.of(context).size.width - 5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -37,11 +34,17 @@ class CustomerItem extends StatelessWidget {
             ],
           ),
           child: new ListTile(
-            title: Text("Empr.: " + customer.empresa),
-            subtitle: Text("Nomb.: " +
-                customer.nombre +
-                "\nDirec.: " +
-                customer.direccion),
+            title: Text(
+              " " + customer.empresa,
+              style: TextStyle(color: Colors.blue),
+            ),
+            subtitle: Text(
+                " " +
+                    customer.nombre.toUpperCase() +
+                    "\n " +
+                    customer.direccion,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
             leading:
                 CircleAvatar(radius: 30.0, child: Text(customer.code ?? "")),
             trailing: Container(
@@ -74,10 +77,13 @@ class CustomerItem extends StatelessWidget {
                                           customer.idLista,
                                           customer.code,
                                           customer.empresa);
-                                  (auth.operation=='cobro')?
-                                  Navigator.of(context).pushNamed(CollectScreen.routeName):
-                                    Navigator.of(context).pushReplacementNamed(
-                                      ProductsOverviewScreen.routeName);
+                                  (auth.operation == 'cobro')
+                                      ? Navigator.of(context).pushNamed(
+                                          CollectScreen.routeName,
+                                          arguments: '')
+                                      : Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              ProductsOverviewScreen.routeName);
                                 } else {
                                   Alert(
                                     context: context,
@@ -105,7 +111,9 @@ class CustomerItem extends StatelessWidget {
                                 .clearProducts();
                             Provider.of<Cart>(context, listen: false)
                                 .clearCart();
-                            Navigator.of(context).pushReplacementNamed('/');
+                            Navigator.of(context).pushReplacementNamed(
+                                CustomersScreen.routeName);
+                            // Navigator.of(context).pushReplacementNamed('/');
                           }
                         : () {
                             Navigator.of(context).pushNamed(
@@ -113,8 +121,7 @@ class CustomerItem extends StatelessWidget {
                                 arguments: customer.id);
                           },
                   ),
-                ])
-                ),
+                ])),
           )),
       // new Divider(color: Colors.blue,),
     ]);

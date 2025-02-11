@@ -1,6 +1,6 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shop_app/providers/carrier.dart';
 import 'package:flutter_shop_app/providers/customers.dart';
 import 'package:flutter_shop_app/providers/orders.dart';
 import 'package:flutter_shop_app/providers/products.dart';
@@ -30,8 +30,9 @@ class CartScreen extends StatelessWidget {
                           customer.customerActive.nombre +
                           "\nDirección: " +
                           customer.customerActive.direccion,
-                      style: TextStyle(fontSize: 20))
-                  : Text("PRIMERO DEBE SELECCIONAR UN CLIENTE"),
+                      style: TextStyle(fontSize: 20, color: Colors.white))
+                  : Text("PRIMERO DEBE SELECCIONAR UN CLIENTE",
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
             ),
             Card(
               margin: EdgeInsets.all(15),
@@ -110,6 +111,8 @@ class _OrderButtonState extends State<OrderButton> {
     final customer = Provider.of<Customers>(context);
     final product = Provider.of<Products>(context);
     final order = Provider.of<Orders>(context);
+    final carrier = Provider.of<Carriers>(context);
+    final today = DateTime.now();
     //
     if (isFirst) {
       orderEnviar = order.getActivated() ??
@@ -119,7 +122,7 @@ class _OrderButtonState extends State<OrderButton> {
       isFirst = false;
     }
     //
-    return FlatButton(
+    return TextButton(
         child:
             _isLoading ? CircularProgressIndicator() : Text("FINALIZAR ORDEN"),
         onPressed: (widget.cart.totalAmount <= 0 ||
@@ -151,45 +154,74 @@ class _OrderButtonState extends State<OrderButton> {
                             });
                           },
                         ),
+
                         DropdownButtonFormField(
+                          disabledHint:
+                              Text(orderEnviar.idTransportista.toString()),
                           value: orderEnviar.idTransportista,
+                          // hint: Text(
+                          //   'SELECCIONE LA FACTURA A COBRAR',
+                          // ),
                           isExpanded: true,
                           decoration:
                               InputDecoration(labelText: "Transportista"),
-                          items: <DropdownMenuItem<int>>[
-                            DropdownMenuItem(
-                              child: Text("Mostrador"),
-                              value: 1,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Astrada Armando"),
-                              value: 4,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Echenique Juan"),
-                              value: 8,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Sciutto Mauro"),
-                              value: 9,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Cisneros Leonardo"),
-                              value: 12,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Miranda Nicolas"),
-                              value: 14,
-                            )
-                          ],
+
                           onChanged: (int value) {
                             setState(() {
                               orderEnviar.idTransportista = value;
                             });
                           },
-                          hint: Text("SELECCIONE TRANSPORTISTA"),
-                          // value: _value,
+
+                          items: carrier.items.map((CarrierOne val) {
+                            return DropdownMenuItem(
+                              value: val.id,
+                              child: Text(
+                                val.nombre,
+                              ),
+                            );
+                          }).toList(),
                         ),
+
+                        // DropdownButtonFormField(
+                        //   value: orderEnviar.idTransportista,
+                        //   isExpanded: true,
+                        //   decoration:
+                        //       InputDecoration(labelText: "Transportista"),
+                        //   items: <DropdownMenuItem<int>>[
+                        //     DropdownMenuItem(
+                        //       child: Text("Mostrador"),
+                        //       value: 1,
+                        //     ),
+                        //     DropdownMenuItem(
+                        //       child: Text("Astrada Armando"),
+                        //       value: 4,
+                        //     ),
+                        //     DropdownMenuItem(
+                        //       child: Text("Echenique Juan"),
+                        //       value: 8,
+                        //     ),
+                        //     DropdownMenuItem(
+                        //       child: Text("Sciutto Mauro"),
+                        //       value: 9,
+                        //     ),
+                        //     DropdownMenuItem(
+                        //       child: Text("Cisneros Leonardo"),
+                        //       value: 12,
+                        //     ),
+                        //     DropdownMenuItem(
+                        //       child: Text("Miranda Nicolas"),
+                        //       value: 14,
+                        //     )
+                        //   ],
+                        //   onChanged: (int value) {
+                        //     setState(() {
+                        //       orderEnviar.idTransportista = value;
+                        //     });
+                        //   },
+                        //   hint: Text("SELECCIONE TRANSPORTISTA"),
+                        //   // value: _value,
+                        // ),
+
                         TextField(
                             controller: myControllerDate,
                             decoration: InputDecoration(
@@ -202,14 +234,16 @@ class _OrderButtonState extends State<OrderButton> {
                               DateTime pickedDate = await showDatePicker(
                                   context: context,
                                   locale: const Locale("es", "ES"),
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(
-                                      2000), //DateTime.now() - not to allow to choose before today.
+                                  initialDate: (DateTime.now().hour <= 15)
+                                      ? today.add(const Duration(days: 1))
+                                      : today.add(const Duration(days: 2)),
+                                  firstDate: (DateTime.now().hour <= 15)
+                                      ? today.add(const Duration(days: 1))
+                                      : today.add(const Duration(days: 2)),
                                   lastDate: DateTime(2101));
 
                               if (pickedDate != null) {
-                                print(
-                                    pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                print(pickedDate);
                                 String formattedDate =
                                     DateFormat('yyyy-MM-dd').format(pickedDate);
                                 print(formattedDate);
@@ -293,7 +327,6 @@ class _OrderButtonState extends State<OrderButton> {
                         child: Text("ACEPTAR "),
                       )
                     ]).show();
-              }
-        );
+              });
   }
 }

@@ -21,7 +21,10 @@ class ProductItem extends StatelessWidget {
     myControllerSolicitado.text = product.price.toString();
     return new Column(children: <Widget>[
       new Container(
-          height: 80,
+          color: product.recent
+              ? Color.fromARGB(255, 245, 239, 214)
+              : Colors.white,
+          height: 120,
           width: MediaQuery.of(context).size.width - 10,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -39,75 +42,80 @@ class ProductItem extends StatelessWidget {
                 "\n Precio: " +
                 NumberFormat.simpleCurrency().format(product.price)),
             leading: CircleAvatar(child: Text(product.id)),
-              trailing: IconButton(
+            trailing: IconButton(
               color: Theme.of(context).accentColor,
 
               icon: Icon(product.isAgregate ? Icons.done : Icons.shopping_cart),
-             // onPressed: (product.isAgregate || cart.nombreCustommer ==null )
+              // onPressed: (product.isAgregate || cart.nombreCustommer ==null )
               onPressed: product.isAgregate
                   ? null
                   : () {
                       Alert(
-                      context: context,
-                        content: Column(
-                          children: <Widget>[
-                            TextField(
-                              controller: myController,
-                              decoration: InputDecoration(
-                                labelText: 'Cantidad',
+                          context: context,
+                          content: Column(
+                            children: <Widget>[
+                              TextField(
+                                controller: myController,
+                                decoration: InputDecoration(
+                                  labelText: 'Cantidad',
+                                ),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                               ),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                            ),
-                            TextField(
+                              TextField(
                                 controller: myControllerSolicitado,
                                 decoration: InputDecoration(
                                   labelText: 'Precio Solicitado',
                                 ),
-                                keyboardType:  TextInputType.numberWithOptions(
-                                                    decimal: true,
-                                                    signed: false,
-                                                  ),
-                             
-                              ),
-                          ],
-                        ),
-                        buttons: [
-                        DialogButton(
-                          //onPressed: () => Navigator.pop(context),
-                          onPressed: () {
-                            cart.addItem(product.id, product.price, product.description,myController.text, myControllerSolicitado.text,0);
-                             product.toggleAgregate(authData.token, authData.userId);
-                            Scaffold.of(context).hideCurrentSnackBar();
-                            Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'El Producto fue agregado a su Carro!',
-                                ),
-                                duration: Duration(seconds: 2),
-                                action: SnackBarAction(
-                                  label: 'DESHACER',
-                                  onPressed: () {
-                                    cart.removeSingleItem(product.id);
-                                  },
+                                keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true,
+                                  signed: false,
                                 ),
                               ),
-                            );
-                            Navigator.pop(context);
-                          },
-                          child: Text("ADD"
-                              //style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                        )
-                      ]
-                    ).show();
+                            ],
+                          ),
+                          buttons: [
+                            DialogButton(
+                              //onPressed: () => Navigator.pop(context),
+                              onPressed: () {
+                                cart.addItem(
+                                    product.id,
+                                    product.price,
+                                    product.description,
+                                    myController.text,
+                                    myControllerSolicitado.text,
+                                    0);
+                                product.toggleAgregate(
+                                    authData.token, authData.userId);
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'El Producto fue agregado a su Carro!',
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                    action: SnackBarAction(
+                                      label: 'DESHACER',
+                                      onPressed: () {
+                                        cart.removeSingleItem(product.id);
+                                      },
+                                    ),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              },
+                              child: Text("ADD"
+                                  //style: TextStyle(color: Colors.white, fontSize: 20),
+                                  ),
+                            )
+                          ]).show();
                     },
             ),
           )),
       // new Divider(color: Colors.blue,),
     ]);
   }
-
 }
