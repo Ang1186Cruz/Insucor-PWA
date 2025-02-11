@@ -1,0 +1,39 @@
+name: Build iOS
+
+on:
+  push:
+    branches:
+      - main  # Puedes cambiar esto a cualquier otra rama que uses
+  pull_request:
+    branches:
+      - main  # Cambiar a la rama correspondiente
+
+jobs:
+  build:
+    runs-on: macos-latest  # Utiliza el runner macOS más reciente
+
+    steps:
+      # 1. Obtener el código
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 2. Configurar Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x.x'  # Asegúrate de usar la versión correcta de Flutter
+
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 4. Compilar para iOS
+      - name: Build iOS
+        run: flutter build ios --release
+
+      # 5. Opcional: Subir el archivo IPA (si lo deseas)
+      - name: Upload IPA file as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app.ipa
+          path: build/ios/iphoneos/Runner.ipa
