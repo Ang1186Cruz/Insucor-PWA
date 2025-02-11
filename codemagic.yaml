@@ -1,0 +1,5 @@
+environment:
+  flutter: stable
+  java: 11
+  xcode: latest
+  dart: "2.10.0"
