@@ -1,39 +1,44 @@
-name: Build iOS
+name: iOS starter workflow
 
 on:
   push:
-    branches:
-      - main  # Puedes cambiar esto a cualquier otra rama que uses
+    branches: [ "master" ]
   pull_request:
-    branches:
-      - main  # Cambiar a la rama correspondiente
+    branches: [ "master" ]
 
 jobs:
   build:
-    runs-on: macos-latest  # Utiliza el runner macOS más reciente
+    name: Build and Test default scheme using any available iPhone simulator
+    runs-on: macos-latest
 
     steps:
-      # 1. Obtener el código
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # 2. Configurar Flutter
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.x.x'  # Asegúrate de usar la versión correcta de Flutter
-
-      # 3. Instalar dependencias
-      - name: Install dependencies
-        run: flutter pub get
-
-      # 4. Compilar para iOS
-      - name: Build iOS
-        run: flutter build ios --release
-
-      # 5. Opcional: Subir el archivo IPA (si lo deseas)
-      - name: Upload IPA file as an artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: app.ipa
-          path: build/ios/iphoneos/Runner.ipa
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set Default Scheme
+        run: |
+          scheme_list=$(xcodebuild -list -json | tr -d "\n")
+          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
+          echo $default | cat >default
+          echo Using default scheme: $default
+      - name: Build
+        env:
+          scheme: ${{ 'default' }}
+          platform: ${{ 'iOS Simulator' }}
+        run: |
+          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
+          device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
+          if [ $scheme = default ]; then scheme=$(cat default); fi
+          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
+          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
+          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+      - name: Test
+        env:
+          scheme: ${{ 'default' }}
+          platform: ${{ 'iOS Simulator' }}
+        run: |
+          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
+          device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
+          if [ $scheme = default ]; then scheme=$(cat default); fi
+          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
+          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
+          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
