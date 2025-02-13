@@ -1,0 +1,29 @@
+workflows:
+  flutter-build:
+    name: Flutter Build
+    description: Build your Flutter app
+    ios:
+      # Configuración del entorno para iOS
+      flutter: stable
+      xcode: 12.5.0
+    android:
+      # Configuración del entorno para Android
+      flutter: stable
+    environment:
+      vars:
+        # Usa la versión de SDK que deseas
+        FLUTTER_CHANNEL: stable
+        FLUTTER_VERSION: "2.7.0"
+        DART_VERSION: "2.10.4"
+    scripts:
+      - name: Set up Flutter SDK
+        script: |
+          git clone https://github.com/flutter/flutter.git -b stable
+          cd flutter
+          git checkout tags/2.7.0 # Usa la versión 2.7.0 del SDK
+          export PATH="$PWD/bin:$PATH"
+          flutter doctor
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Build the app
+        script: flutter build apk --release
