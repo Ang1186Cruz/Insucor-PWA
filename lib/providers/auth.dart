@@ -6,12 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
-  String _token;
-  DateTime _expiryDate;
-  String _userId;
-  String _rolId;
-  Timer _authTimer;
-  String _operation;
+  String? _token;
+  DateTime? _expiryDate;
+  String? _userId;
+  String? _rolId;
+  Timer? _authTimer;
+  String? _operation;
   String _idRuta = '';
   bool splash = true;
 
@@ -20,24 +20,24 @@ class Auth with ChangeNotifier {
   }
 
   bool get isAuth {
-    return token != null;
+    return token != '';
   }
 
   String get token {
     if (_expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now()) &&
+        _expiryDate!.isAfter(DateTime.now()) &&
         _token != null) {
-      return _token;
+      return _token ?? '';
     }
-    return null;
+    return '';
   }
 
   String get userId {
-    return _userId;
+    return _userId ?? '';
   }
 
   String get rolId {
-    return _rolId;
+    return _rolId ?? '';
   }
 
   String get IdRuta {
@@ -45,7 +45,7 @@ class Auth with ChangeNotifier {
   }
 
   String get operation {
-    return _operation;
+    return _operation ?? '';
   }
 
   void changeSplash() {
@@ -83,7 +83,7 @@ class Auth with ChangeNotifier {
         'token': _token,
         'userId': _userId,
         'rolId': _rolId,
-        'expiryDate': _expiryDate.toIso8601String()
+        'expiryDate': _expiryDate?.toIso8601String()
       });
       setOperacion('pedido');
       prefs.setString('userData', userData);
@@ -106,16 +106,19 @@ class Auth with ChangeNotifier {
       return false;
     }
     final extractedUserData =
-        json.decode(prefs.getString('userData')) as Map<String, Object>;
-    final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
+        json.decode(prefs.getString('userData') ?? '') as Map<String, Object>;
+
+    final expiryDate = extractedUserData['expiryDate'] is String
+        ? DateTime.parse(extractedUserData['expiryDate'] as String)
+        : throw ArgumentError('expiryDate is not a valid string');
 
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
 
-    _token = extractedUserData['token'];
-    _userId = extractedUserData['userId'];
-    _rolId = extractedUserData['rolId'];
+    _token = extractedUserData['token'] as String;
+    _userId = extractedUserData['userId'] as String;
+    _rolId = extractedUserData['rolId'] as String;
     _expiryDate = expiryDate;
     notifyListeners();
     _autoLogout();
@@ -127,7 +130,7 @@ class Auth with ChangeNotifier {
     _userId = null;
     _expiryDate = null;
     if (_authTimer != null) {
-      _authTimer.cancel();
+      _authTimer?.cancel();
       _authTimer = null;
     }
     setOperacion('');
@@ -139,9 +142,9 @@ class Auth with ChangeNotifier {
 
   void _autoLogout() {
     if (_authTimer != null) {
-      _authTimer.cancel();
+      _authTimer?.cancel();
     }
-    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
+    final timeToExpiry = _expiryDate?.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExpiry ?? 0), logout);
   }
 }

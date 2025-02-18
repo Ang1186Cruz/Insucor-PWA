@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:js_util';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import './cart.dart';
@@ -9,34 +10,34 @@ class OrderItem {
   final String nameCustommer;
   final String mailCustomer;
   final String address;
-  final DateTime fecha;
+  final DateTime? fecha;
   final String codigo;
   final String transportista;
   final String noCerrado;
   int idTransportista;
-  DateTime fechaEntrega;
+  DateTime? fechaEntrega;
   String observacion;
   String modo;
   String telefono;
-  double importe;
+  double? importe;
   final List<CartItem> products;
 
   OrderItem(
-      {@required this.idOrder,
-      @required this.nameCustommer,
-      this.mailCustomer,
-      this.address,
+      {required this.idOrder,
+      required this.nameCustommer,
+      this.mailCustomer = '',
+      this.address = '',
       this.fecha,
-      this.codigo,
-      this.transportista,
-      this.noCerrado,
-      this.idTransportista,
+      this.codigo = '',
+      this.transportista = '',
+      this.noCerrado = '',
+      this.idTransportista = 0,
       this.fechaEntrega,
-      this.observacion,
-      this.modo,
-      this.telefono,
+      this.observacion = '',
+      this.modo = '',
+      this.telefono = '',
       this.importe,
-      this.products});
+      this.products = const []});
   factory OrderItem.fromJson(Map<String, dynamic> parseJson) {
     return OrderItem(
       idOrder: parseJson['idPedido'],
@@ -67,7 +68,7 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  OrderItem orderActive;
+  OrderItem? orderActive;
   List<OrderItem> _orders = [];
   List<OrderItem> _ordersOrdenes = [];
   List<OrderItem> _ordersOrdenesFacturadas = [];
@@ -136,7 +137,7 @@ class Orders with ChangeNotifier {
   }
 
   OrderItem getActivated() {
-    return orderActive;
+    return orderActive ?? newObject();
   }
 
   Future<void> addOrder(

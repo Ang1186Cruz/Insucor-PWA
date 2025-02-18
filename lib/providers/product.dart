@@ -13,21 +13,21 @@ class Product with ChangeNotifier {
   bool recent;
   int stock;
   bool solicitoStock;
-  DateTime fechaUltimaStock;
+  DateTime? fechaUltimaStock;
   String nombreUsuario;
 
   Product(
-      {@required this.id,
-      @required this.title,
-      @required this.description,
-      @required this.price,
-      this.imageUrl,
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.price,
+      this.imageUrl = '',
       this.isAgregate = false,
       this.recent = false,
       this.stock = 0,
       this.solicitoStock = false,
       this.fechaUltimaStock,
-      this.nombreUsuario});
+      this.nombreUsuario = ''});
 
   factory Product.fromJson(Map<String, dynamic> parseJson, List<String> lista) {
     bool isAgregado = lista

@@ -15,7 +15,7 @@ class DeliverysScreen extends StatefulWidget {
 
 class _DeliverysScreenState extends State<DeliverysScreen> {
   var _searchName = "";
-  Future _deliverysFuture;
+  late Future _deliverysFuture;
 
   Future _obtainDeliverysFuture() {
     return Provider.of<Deliverys>(context, listen: false).fetchAndSetDelivery();

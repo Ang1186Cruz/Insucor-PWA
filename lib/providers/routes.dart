@@ -9,15 +9,15 @@ class RouteItem with ChangeNotifier {
   final String cliente;
   final String codCli;
   final String nroComprobante;
-  final String idPedido;
-  final double importe;
-  final String accion; // podria ser ENTREGADO COBRADO;
+  final String? idPedido;
+  final double? importe;
+  final String? accion; // podria ser ENTREGADO COBRADO;
 
   RouteItem(
-      {@required this.id,
-      @required this.cliente,
-      @required this.codCli,
-      this.nroComprobante,
+      {required this.id,
+      required this.cliente,
+      required this.codCli,
+      this.nroComprobante = '',
       this.idPedido,
       this.importe,
       this.accion});

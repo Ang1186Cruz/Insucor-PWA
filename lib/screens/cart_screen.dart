@@ -27,9 +27,9 @@ class CartScreen extends StatelessWidget {
               child: (customer.customerActive != null)
                   ? Text(
                       "Cliente: " +
-                          customer.customerActive.nombre +
+                          customer.customerActive!.nombre +
                           "\nDirección: " +
-                          customer.customerActive.direccion,
+                          customer.customerActive!.direccion,
                       style: TextStyle(fontSize: 20, color: Colors.white))
                   : Text("PRIMERO DEBE SELECCIONAR UN CLIENTE",
                       style: TextStyle(fontSize: 20, color: Colors.white)),
@@ -53,7 +53,7 @@ class CartScreen extends StatelessWidget {
                         style: TextStyle(
                             color: Theme.of(context)
                                 .primaryTextTheme
-                                .headline6
+                                .headline6!
                                 .color),
                       ),
                       backgroundColor: Theme.of(context).primaryColor,
@@ -74,7 +74,7 @@ class CartScreen extends StatelessWidget {
                     cart.items.values.toList()[index].price,
                     cart.items.values.toList()[index].quantity,
                     cart.items.values.toList()[index].title,
-                    cart.items.values.toList()[index].priceRequested),
+                    cart.items.values.toList()[index].priceRequested ?? 0),
                 itemCount: cart.items.length,
               ),
             ),
@@ -85,8 +85,8 @@ class CartScreen extends StatelessWidget {
 
 class OrderButton extends StatefulWidget {
   const OrderButton({
-    Key key,
-    @required this.cart,
+    Key? key,
+    required this.cart,
   }) : super(key: key);
 
   final Cart cart;
@@ -96,7 +96,7 @@ class OrderButton extends StatefulWidget {
 }
 
 class _OrderButtonState extends State<OrderButton> {
-  OrderItem orderEnviar;
+  late OrderItem orderEnviar;
   var _isLoading = false;
   var buttonEnabled = "0";
   final myControllerDate = TextEditingController();
@@ -148,9 +148,9 @@ class _OrderButtonState extends State<OrderButton> {
                               value: "B",
                             )
                           ],
-                          onChanged: (String value) {
+                          onChanged: (String? value) {
                             setState(() {
-                              orderEnviar.modo = value;
+                              orderEnviar.modo = value ?? '';
                             });
                           },
                         ),
@@ -166,9 +166,9 @@ class _OrderButtonState extends State<OrderButton> {
                           decoration:
                               InputDecoration(labelText: "Transportista"),
 
-                          onChanged: (int value) {
+                          onChanged: (int? value) {
                             setState(() {
-                              orderEnviar.idTransportista = value;
+                              orderEnviar.idTransportista = value ?? 0;
                             });
                           },
 
@@ -231,7 +231,7 @@ class _OrderButtonState extends State<OrderButton> {
                                     : null //label text of field
                                 ),
                             onTap: () async {
-                              DateTime pickedDate = await showDatePicker(
+                              DateTime? pickedDate = await showDatePicker(
                                   context: context,
                                   locale: const Locale("es", "ES"),
                                   initialDate: (DateTime.now().hour <= 15)
@@ -282,7 +282,7 @@ class _OrderButtonState extends State<OrderButton> {
                                       orderEnviar.idOrder,
                                       widget.cart.items.values.toList(),
                                       widget.cart.totalAmount,
-                                      int.parse(customer.customerActive.id),
+                                      int.parse(customer.customerActive!.id),
                                       orderEnviar.idTransportista,
                                       myControllerDate.text,
                                       myControllerObservacion.text,

@@ -60,7 +60,7 @@ class _NotesOrderItemState extends State<NotesOrderItem> {
 
     for (var i = 0; i < widget.order.products.length; i++) {
       cantidadPrepa += widget.order.products[i].preparado ? 1 : 0;
-      cantidadContro += widget.order.products[i].controlado ? 1 : 0;
+      cantidadContro += (widget.order.products[i].controlado ?? false) ? 1 : 0;
       cantidadTotal += widget.order.products[i].quantity;
       montoTotal +=
           (widget.order.products[i].price * widget.order.products[i].quantity);
@@ -91,8 +91,8 @@ class _NotesOrderItemState extends State<NotesOrderItem> {
                             ") " +
                             NumberFormat.simpleCurrency().format(montoTotal) +
                             "\n" +
-                            DateFormat("dd/MM/yyyy")
-                                .format(widget.order.fechaEntrega),
+                            DateFormat("dd/MM/yyyy").format(
+                                widget.order.fechaEntrega ?? DateTime.now()),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black)),
                     leading: Padding(
@@ -232,7 +232,7 @@ class _NotesOrderItemState extends State<NotesOrderItem> {
   activarTiempo(bool expanded, String id) {
     final noteOrder = Provider.of<NoteOrders>(context, listen: false);
 
-    Timer miTimer;
+    Timer? miTimer;
     if (expanded) {
       miTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
         var order = noteOrder.getOrder(id);
@@ -244,7 +244,7 @@ class _NotesOrderItemState extends State<NotesOrderItem> {
 
       print(id);
     } else {
-      miTimer.cancel();
+      miTimer!.cancel();
     }
   }
 }

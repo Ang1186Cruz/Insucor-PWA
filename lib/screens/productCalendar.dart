@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -58,6 +56,7 @@ class _ProductCalendarState extends State<ProductCalendarScreen> {
     if (listEventSource.isNotEmpty) {
       return kEvents[day] ?? [];
     }
+    return [];
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {

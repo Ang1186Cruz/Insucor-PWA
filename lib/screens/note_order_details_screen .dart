@@ -19,7 +19,7 @@ class NoteOrdersDetailsScreen extends StatefulWidget {
 
 class _NoteOrdersDetailsState extends State<NoteOrdersDetailsScreen> {
   var _searchName = "";
-  Future _ordersFuture;
+  late Future _ordersFuture;
 
   Future _obtainOrdersFuture() {
     return Provider.of<NoteOrders>(context, listen: false)

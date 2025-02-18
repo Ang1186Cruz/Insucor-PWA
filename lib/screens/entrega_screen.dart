@@ -35,11 +35,11 @@ List<DropdownMenuItem<String>> get motivosDropdownItems {
 class _EntregaScreenState extends State<EntregaScreen> {
   var _isInit = true;
   var _isLoading = false;
-  Timer _timer;
+  late Timer _timer;
   int _time = 0;
   String _motivo = "completo";
-  DateTime fechaInicio;
-  DateTime fechafin;
+  late DateTime fechaInicio;
+  late DateTime fechafin;
   @override
   void initState() {
     super.initState();
@@ -48,7 +48,7 @@ class _EntregaScreenState extends State<EntregaScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final idOrder = ModalRoute.of(context).settings.arguments as String;
+      final idOrder = ModalRoute.of(context)?.settings.arguments as String;
       Provider.of<Orders>(context, listen: false).activateOrder(idOrder);
       setState(() {
         _isLoading = false;
@@ -258,7 +258,8 @@ class _EntregaScreenState extends State<EntregaScreen> {
                                         ),
                                         orderActivate.products[index].todo
                                             ? IconButton(
-                                                onPressed: () {}, icon: null)
+                                                onPressed: () {},
+                                                icon: SizedBox())
                                             : IconButton(
                                                 icon: Icon(
                                                   Icons.close,
@@ -300,10 +301,11 @@ class _EntregaScreenState extends State<EntregaScreen> {
                                                                 .motivo,
                                                             items:
                                                                 motivosDropdownItems,
-                                                            onChanged:
-                                                                (String value) {
+                                                            onChanged: (String?
+                                                                value) {
                                                               setState(() {
-                                                                _motivo = value;
+                                                                _motivo =
+                                                                    value ?? '';
                                                               });
                                                             },
                                                           ),
@@ -355,7 +357,8 @@ class _EntregaScreenState extends State<EntregaScreen> {
                                                 },
                                               ),
                                       ])
-                                    : IconButton(onPressed: () {}, icon: null)),
+                                    : IconButton(
+                                        onPressed: () {}, icon: SizedBox())),
                           ],
                         ),
                         separatorBuilder: (context, index) =>
@@ -430,7 +433,7 @@ class _EntregaScreenState extends State<EntregaScreen> {
     if (value.length == 0 || value == '0') {
       return "El Campo es requerido";
     }
-    return null;
+    return '';
   }
 
   save(OrderItem orderr) async {

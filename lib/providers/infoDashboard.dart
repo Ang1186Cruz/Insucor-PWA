@@ -7,17 +7,17 @@ import 'package:http/http.dart' as http;
 
 class ListDashboard {
   final String date, customer, invoice, status, transportista;
-  final double import, cheques, total;
+  final double? import, cheques, total;
 
   ListDashboard(
-      {this.date,
-      this.customer,
-      this.invoice,
-      this.status,
+      {this.date = '',
+      this.customer = '',
+      this.invoice = '',
+      this.status = '',
       this.import,
       this.cheques,
       this.total,
-      this.transportista});
+      this.transportista = ''});
 
   factory ListDashboard.fromJson(Map<String, dynamic> parseJson) {
     return ListDashboard(
@@ -36,17 +36,16 @@ class ListDashboard {
 class RouterInfo {
   final String svgSrc, title, cantidadCliente, tabla;
   final int totaltarea, percentage;
-  final double total;
-
-  final Color color;
+  final double? total;
+  final Color? color;
 
   RouterInfo({
-    this.svgSrc,
-    this.title,
-    this.cantidadCliente,
-    this.tabla,
-    this.totaltarea,
-    this.percentage,
+    this.svgSrc = '',
+    this.title = '',
+    this.cantidadCliente = '',
+    this.tabla = '',
+    this.totaltarea = 0,
+    this.percentage = 0,
     this.color,
     this.total,
   });

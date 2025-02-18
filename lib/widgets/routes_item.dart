@@ -57,7 +57,7 @@ class _RoutesItemState extends State<RoutesItem> {
                             NumberFormat.simpleCurrency()
                                 .format(widget.routes.importe) +
                             "\nAccion : " +
-                            widget.routes.accion.replaceAll('DO', 'R'),
+                            widget.routes.accion!.replaceAll('DO', 'R'),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black)),
                     leading: CircleAvatar(

@@ -9,9 +9,13 @@ import 'package:flutter_shop_app/providers/cart.dart';
 class Products with ChangeNotifier {
   final String authToken;
   final String userId;
-  Products(this.authToken, this.userId, this._items);
-
   List<Product> _items = []; //DUMMY_PRODUCTS;
+
+  Products(this.authToken, this.userId, this._items);
+  Products.empty()
+      : authToken = '',
+        userId = '',
+        _items = [];
 
   var _showFavoritesOnly = false;
 
@@ -40,7 +44,7 @@ class Products with ChangeNotifier {
   Future<void> fetchAndSetProduct(
       String idLista, Map<String, CartItem> itemsCard, String idCliente) async {
     List<String> listaProducto = [];
-    if (itemsCard != null) {
+    if (itemsCard.length > 0) {
       itemsCard.forEach((key, value) {
         listaProducto.add(value.id);
       });
@@ -143,6 +147,5 @@ class Products with ChangeNotifier {
       notifyListeners();
       throw HttpException('Could not delete product.');
     }
-    existingProduct = null;
   }
 }

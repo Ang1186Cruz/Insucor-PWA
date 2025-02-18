@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProxyProvider<Auth, Products>(
-          create: null,
+          create: (_) => Products('', '', []),
           update: (_, auth, previousProducts) => Products(
               auth.token,
               auth.userId,
@@ -59,54 +59,55 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => Cart()),
         ChangeNotifierProxyProvider<Auth, Orders>(
-          create: null,
+          //create: null,
+          create: (_) => Orders('', '', []),
           update: (_, auth, previousOrders) => Orders(auth.token, auth.userId,
               previousOrders == null ? [] : previousOrders.orders),
         ),
         ChangeNotifierProxyProvider<Auth, Events>(
-          create: null,
+          create: (_) => Events('', ''),
           update: (_, auth, previousOrders) => Events(auth.token, auth.userId),
         ),
         ChangeNotifierProxyProvider<Auth, NoteOrders>(
-          create: null,
+          create: (_) => NoteOrders('', '', ''),
           update: (_, auth, previousInfoListDashboard) =>
               NoteOrders(auth.token, auth.userId, auth.rolId),
         ),
         ChangeNotifierProxyProvider<Auth, Deliverys>(
-          create: null,
+          create: (_) => Deliverys(null, null, []),
           update: (_, auth, previousDeliverys) => Deliverys(
               auth.token,
               auth.userId,
               previousDeliverys == null ? [] : previousDeliverys.deliverys),
         ),
         ChangeNotifierProxyProvider<Auth, Cobros>(
-          create: null,
+          create: (_) => Cobros('', '', []),
           update: (_, auth, previousCobros) => Cobros(auth.token, auth.userId,
               previousCobros == null ? [] : previousCobros.cobros),
         ),
         ChangeNotifierProxyProvider<Auth, Carriers>(
-          create: null,
+          create: (_) => Carriers('', '', []),
           update: (_, auth, previousCarriers) => Carriers(
               auth.token,
               auth.userId,
               previousCarriers == null ? [] : previousCarriers.items),
         ),
         ChangeNotifierProxyProvider<Auth, Spends>(
-          create: null,
+          create: (_) => Spends('', ''),
           update: (_, auth, previousSpends) => Spends(auth.token, auth.userId),
         ),
         ChangeNotifierProxyProvider<Auth, Routes>(
-          create: null,
+          create: (_) => Routes('', '', []),
           update: (_, auth, previousRoutes) => Routes(auth.token, auth.userId,
               previousRoutes == null ? [] : previousRoutes.routes),
         ),
         ChangeNotifierProxyProvider<Auth, InfoListDashboard>(
-          create: null,
+          create: (_) => InfoListDashboard('', '', ''),
           update: (_, auth, previousInfoListDashboard) =>
               InfoListDashboard(auth.token, auth.userId, auth.rolId),
         ),
         ChangeNotifierProxyProvider<Auth, Customers>(
-          create: null,
+          create: (_) => Customers('', '', []),
           update: (_, auth, previousCustomers) => Customers(
               auth.token,
               auth.userId,

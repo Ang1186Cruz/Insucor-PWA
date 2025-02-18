@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
-//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_shop_app/providers/auth.dart';
 import 'package:flutter_shop_app/providers/cart.dart';
 import 'package:flutter_shop_app/providers/product.dart';
-//import 'package:flutter_shop_app/screens/product_detail_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -44,7 +42,7 @@ class ProductEditStock extends StatelessWidget {
                 product.stock.toString() +
                 "\n Actualizado: " +
                 DateFormat("dd/MM/yyyy HH:mm")
-                    .format(product.fechaUltimaStock) +
+                    .format(product.fechaUltimaStock ?? DateTime.now()) +
                 "\n Usuario: " +
                 product.nombreUsuario),
             leading: CircleAvatar(child: Text(product.id)),

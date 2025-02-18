@@ -81,7 +81,7 @@ class _OrderItemState extends State<OrderItem> {
                         widget.order.transportista +
                             " " +
                             DateFormat("dd/MM/yyyy HH:mm")
-                                .format(widget.order.fecha) +
+                                .format(widget.order.fecha ?? DateTime.now()) +
                             "\n " +
                             NumberFormat.simpleCurrency().format(montoTotal),
                         style: TextStyle(

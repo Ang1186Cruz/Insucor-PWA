@@ -7,29 +7,29 @@ class CartItem {
   final String title;
   int quantity;
   final double price;
-  final double priceRequested;
-  String descripcion;
+  final double? priceRequested;
+  String? descripcion;
   bool todo;
   String motivo;
-  int cantidadPreparada;
+  int? cantidadPreparada;
   bool controlado;
   bool preparado;
   bool retiroDespacho;
   bool camaraFriogorifico;
-  TextEditingController inputCantidadPrepa; //= TextEditingController();
+  TextEditingController? inputCantidadPrepa; //= TextEditingController();
 
   CartItem(
-      {this.idPedidP,
-      @required this.id,
-      @required this.title,
-      @required this.quantity,
-      @required this.price,
+      {this.idPedidP = 0,
+      required this.id,
+      required this.title,
+      required this.quantity,
+      required this.price,
       this.priceRequested,
       this.descripcion,
       this.todo = false,
       this.motivo = 'completo',
       this.cantidadPreparada,
-      this.controlado,
+      this.controlado = false,
       this.preparado = false,
       this.retiroDespacho = false,
       this.camaraFriogorifico = false,
@@ -55,7 +55,7 @@ class Cart with ChangeNotifier {
   }
 
   void addItem(String productId, double price, String title, String quantity,
-      String priceRequested, int idpedidoP) {
+      String priceRequested, int? idpedidoP) {
     if (_items.containsKey(productId)) {
       _items.update(
           productId,
@@ -64,7 +64,7 @@ class Cart with ChangeNotifier {
                 title: existingCartItem.title,
                 price: existingCartItem.price,
                 quantity: int.parse(quantity),
-                priceRequested: double.parse(priceRequested ?? 0),
+                priceRequested: double.parse(priceRequested ?? '0'),
               ));
     } else {
       _items.putIfAbsent(
@@ -74,7 +74,7 @@ class Cart with ChangeNotifier {
                 title: title,
                 price: price,
                 quantity: int.parse(quantity),
-                priceRequested: double.parse(priceRequested ?? 0),
+                priceRequested: double.parse(priceRequested ?? '0'),
               ));
     }
     notifyListeners();
@@ -89,7 +89,7 @@ class Cart with ChangeNotifier {
     if (!_items.containsKey(productId)) {
       return;
     }
-    if (_items[productId].quantity > 1) {
+    if ((_items[productId]?.quantity ?? 0) > 1) {
       _items.update(
           productId,
           (existingCartItem) => CartItem(

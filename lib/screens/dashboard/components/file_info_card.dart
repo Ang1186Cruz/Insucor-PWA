@@ -9,8 +9,8 @@ import '../../../providers/auth.dart';
 
 class FileInfoCard extends StatelessWidget {
   const FileInfoCard({
-    Key key,
-    @required this.info,
+    Key? key,
+    required this.info,
   }) : super(key: key);
 
   final RouterInfo info;
@@ -63,7 +63,7 @@ class FileInfoCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context)
                 .textTheme
-                .titleMedium
+                .titleMedium!
                 .copyWith(color: Colors.white),
           ),
           (auth.rolId == '1' && info.tabla == "Cobros")
@@ -74,7 +74,7 @@ class FileInfoCard extends StatelessWidget {
                         NumberFormat.simpleCurrency().format(info.total),
                         style: Theme.of(context)
                             .textTheme
-                            .bodySmall
+                            .bodySmall!
                             .copyWith(color: Colors.white),
                       ),
                     ])
@@ -85,14 +85,14 @@ class FileInfoCard extends StatelessWidget {
                       "${info.totaltarea} Tareas",
                       style: Theme.of(context)
                           .textTheme
-                          .bodySmall
+                          .bodySmall!
                           .copyWith(color: Colors.white),
                     ),
                     Text(
                       "${info.cantidadCliente} Clientes",
                       style: Theme.of(context)
                           .textTheme
-                          .bodySmall
+                          .bodySmall!
                           .copyWith(color: Colors.white),
                     ),
                   ],
@@ -105,9 +105,9 @@ class FileInfoCard extends StatelessWidget {
 
 class ProgressLine extends StatelessWidget {
   const ProgressLine({
-    Key key,
+    Key? key,
     this.color = primaryColor,
-    @required this.percentage,
+    required this.percentage,
   }) : super(key: key);
 
   final Color color;
@@ -124,8 +124,6 @@ class ProgressLine extends StatelessWidget {
             animation: true,
             animationDuration: 1000,
             lineHeight: 20.0,
-            //leading: new Text("left content"),
-            // trailing: new Text("Ejecutadas"),
             percent: (percentage / 100), // 0.2,
             center: Text(percentage.toString() + "%"),
             linearStrokeCap: LinearStrokeCap.butt,

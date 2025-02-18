@@ -70,9 +70,9 @@ class _ProductOrderItem extends State<ProductOrderItem> {
                   widget.product.preparado = true;
                   if (direction == DismissDirection.startToEnd) {
                     save(widget.product.idPedidP, "Preparado", true,
-                        widget.product.inputCantidadPrepa.text);
+                        widget.product.inputCantidadPrepa!.text);
                   } else {
-                    widget.product.inputCantidadPrepa.text = "0";
+                    widget.product.inputCantidadPrepa!.text = "0";
                     save(widget.product.idPedidP, "Preparado", true, "0");
                   }
                   Navigator.of(innerContext).pop(false);
@@ -173,7 +173,7 @@ class _ProductOrderItem extends State<ProductOrderItem> {
                                     widget.product.idPedidP,
                                     "Controlado",
                                     !widget.product.controlado,
-                                    widget.product.inputCantidadPrepa.text);
+                                    widget.product.inputCantidadPrepa!.text);
                                 setState(
                                     () => widget.product.controlado = value);
                               }),
@@ -199,8 +199,8 @@ class _ProductOrderItem extends State<ProductOrderItem> {
                                           widget.product.idPedidP,
                                           "Preparado",
                                           false,
-                                          widget
-                                              .product.inputCantidadPrepa.text);
+                                          widget.product.inputCantidadPrepa!
+                                              .text);
                                       setState(() {
                                         widget.product.preparado = false;
                                       });

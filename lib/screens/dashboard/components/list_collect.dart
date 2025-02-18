@@ -7,7 +7,7 @@ import '../../../constants.dart';
 
 class ListCollects extends StatelessWidget {
   const ListCollects({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

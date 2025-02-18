@@ -9,9 +9,9 @@ import 'file_info_card.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({
-    Key key,
-    this.listRouterInfoShow,
-    this.mostrarFecha,
+    Key? key,
+    this.listRouterInfoShow = const [],
+    this.mostrarFecha = false,
   }) : super(key: key);
 
   final List<RouterInfo> listRouterInfoShow;
@@ -58,8 +58,8 @@ class MyFiles extends StatelessWidget {
 
 class FileInfoCardGridView extends StatelessWidget {
   const FileInfoCardGridView(
-      {Key key,
-      this.listRouterInfoShow11,
+      {Key? key,
+      this.listRouterInfoShow11 = const [],
       this.crossAxisCount = 4,
       this.childAspectRatio = 1})
       : super(key: key);
