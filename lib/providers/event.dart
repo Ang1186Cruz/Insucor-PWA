@@ -55,7 +55,7 @@ class Events with ChangeNotifier {
         DateTime eventDate =
             DateFormat('yyyy-MM-dd').parse(event['fechaVencimiento']).toUtc();
         events[eventDate] = events[eventDate] ?? [];
-        events[eventDate].add(Event(event['nombre'],
+        events[eventDate]?.add(Event(event['nombre'],
             'Lote: ${event['lote']} \n Fecha Compra: ${event['fechaCompra']} \n Cantidad: ${event['cantidad']}'));
       }
       listEventSource = events;

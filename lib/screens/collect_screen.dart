@@ -25,7 +25,7 @@ class _CollectScreenState extends State<CollectScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      nroComprobante = ModalRoute.of(context).settings.arguments as String;
+      nroComprobante = ModalRoute.of(context)?.settings.arguments as String;
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -67,7 +67,9 @@ class _CollectScreenState extends State<CollectScreen> {
     if (this.nroComprobante != '') {
       _numFactura = nroComprobante;
     } else {
-      _numFactura = customers.customerActive.facturadropdownItems.first;
+      if (customers.customerActive != null) {
+        _numFactura = customers.customerActive!.facturadropdownItems.first;
+      }
     }
     return MaterialApp(
       home: new Scaffold(
@@ -102,7 +104,7 @@ class _CollectScreenState extends State<CollectScreen> {
                                 color: Colors.amber,
                                 child: Text(
                                   "Nombre Cliente \n" +
-                                      customers.customerActive.nombre,
+                                      customers.customerActive!.nombre,
                                   style: TextStyle(color: Colors.black),
                                 )),
                             formItemsDesign(
@@ -112,13 +114,13 @@ class _CollectScreenState extends State<CollectScreen> {
                                 isExpanded: true,
                                 onChanged: (this.nroComprobante != '')
                                     ? null
-                                    : (value) {
+                                    : (String? value) {
                                         setState(() {
-                                          _numFactura = value;
+                                          _numFactura = value ?? '';
                                         });
                                       },
                                 items: customers
-                                    .customerActive.facturadropdownItems
+                                    .customerActive!.facturadropdownItems
                                     .map((String val) {
                                   return DropdownMenuItem(
                                     value: val,
@@ -223,9 +225,9 @@ class _CollectScreenState extends State<CollectScreen> {
         formItemsDesign(CheckboxListTile(
           title: Text('MONTO NO CONTROLADO'),
           value: notControl,
-          onChanged: (newValue) {
+          onChanged: (bool? newValue) {
             setState(() {
-              notControl = newValue;
+              notControl = newValue ?? false;
             });
           },
         )),
@@ -433,11 +435,11 @@ class _CollectScreenState extends State<CollectScreen> {
             .toString();
   }
 
-  String validateName(String value) {
-    if (value.length == 0 || value == '0') {
+  String validateName(String? value) {
+    if (value != null && value.length == 0 || value == '0') {
       return "El Campo es requerido";
     }
-    return null;
+    return '';
   }
 
   save() {
@@ -446,7 +448,7 @@ class _CollectScreenState extends State<CollectScreen> {
     final product = Provider.of<Products>(context, listen: false);
     final listNum = _numFactura.split("|");
     String numeroFact = listNum[0];
-    if (keyForm.currentState.validate() && numeroFact != '') {
+    if (keyForm.currentState!.validate() && numeroFact != '') {
       if (iRecibido.text.isNotEmpty && iRecibido.text != '0') {
         edosMil.text = '0';
         eMil.text = '0';
@@ -458,7 +460,7 @@ class _CollectScreenState extends State<CollectScreen> {
         eDiez.text = '0';
       }
       Provider.of<Cobros>(context, listen: false).addCobro(
-          customer.customerActive.id,
+          customer.customerActive!.id,
           numeroFact,
           edosMil.text,
           eMil.text,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../providers/deliverys.dart' as ord;
 
-
 class DeliveryItem extends StatefulWidget {
   final ord.DeliveryItem delivery;
   final String value;
@@ -27,53 +26,51 @@ class _DeliveryItemState extends State<DeliveryItem> {
       search = (widget.delivery.nombre
               .toUpperCase()
               .contains(widget.value.toUpperCase()) ||
-          widget.delivery.estadoEntrega
+          widget.delivery.estadoEntrega!
               .toUpperCase()
               .contains(widget.value.toUpperCase()));
     }
-    length =
-        (widget.delivery.products.length == 0) ? 1 : widget.delivery.products.length;
+    length = (widget.delivery.products.length == 0)
+        ? 1
+        : widget.delivery.products.length;
 
     for (var i = 0; i < widget.delivery.products.length; i++) {
       cantidadTotal += widget.delivery.products[i].quantity;
-      montoTotal +=
-          (widget.delivery.products[i].price * widget.delivery.products[i].quantity);
+      montoTotal += (widget.delivery.products[i].price *
+          widget.delivery.products[i].quantity);
     }
     return search
         ? AnimatedContainer(
             duration: Duration(milliseconds: 400),
-            height: _expanded
-                ? 500 
-                : 120,
+            height: _expanded ? 500 : 120,
             child: Card(
               margin: EdgeInsets.all(10),
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(
-                        widget.delivery.nombre,
+                    title: Text(widget.delivery.nombre,
                         style: TextStyle(color: Colors.blue)),
                     // visualDensity: VisualDensity(vertical: 10),
-                     subtitle: Text(DateFormat("dd/MM/yyyy HH:mm")
-                             .format(widget.delivery.fechaAlta),
-                             style: TextStyle(
+                    subtitle: Text(
+                        DateFormat("dd/MM/yyyy HH:mm").format(
+                            widget.delivery.fechaAlta ?? DateTime.now()),
+                        style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black)),
                     trailing: Container(
                         width: 100,
                         child: Row(children: <Widget>[
-                           IconButton(
-                             icon: Icon(_expanded
-                                 ? Icons.expand_less
-                                 : Icons.expand_more),
-                             onPressed: () {
-                               setState(() {
-                                 _expanded = !_expanded;
-                               });
-                             },
-                           ),
+                          IconButton(
+                            icon: Icon(_expanded
+                                ? Icons.expand_less
+                                : Icons.expand_more),
+                            onPressed: () {
+                              setState(() {
+                                _expanded = !_expanded;
+                              });
+                            },
+                          ),
                         ])),
                   ),
-                  
                   AnimatedContainer(
                     duration: Duration(milliseconds: 50),
                     padding:
@@ -117,8 +114,7 @@ class _DeliveryItemState extends State<DeliveryItem> {
                     padding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     height: _expanded
-                        ? 
-                        min(widget.delivery.products.length * 80.0 + 50, 300)
+                        ? min(widget.delivery.products.length * 80.0 + 50, 300)
                         : 0,
                     child: ListView.separated(
                       itemBuilder: (_, index) => Row(
@@ -189,7 +185,7 @@ class _DeliveryItemState extends State<DeliveryItem> {
                                   textAlign: TextAlign.right,
                                 )),
                                 ((length - 1) == index)
-                                    ?  Container(
+                                    ? Container(
                                         margin:
                                             const EdgeInsets.only(top: 40.0),
                                         child: Text(
@@ -213,7 +209,6 @@ class _DeliveryItemState extends State<DeliveryItem> {
                       itemCount: widget.delivery.products.length,
                     ),
                   ),
-               
                 ],
               ),
             ),

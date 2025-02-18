@@ -5,24 +5,24 @@ import 'package:http/http.dart' as http;
 import './routes.dart';
 
 class ChequesItem {
-  String numero;
-  double importe;
+  String? numero;
+  double? importe;
   ChequesItem({this.numero, this.importe});
 }
 
 class CobroItem {
   final String idCobro;
   final String idCliente;
-  String nombre;
-  String noFactura;
-  double totalEfectivo;
-  double totalCheque;
-  double totalRecibido;
-  DateTime fechaCobro;
+  String? nombre;
+  String? noFactura;
+  double? totalEfectivo;
+  double? totalCheque;
+  double? totalRecibido;
+  DateTime? fechaCobro;
 
   CobroItem(
-      {@required this.idCobro,
-      @required this.idCliente,
+      {required this.idCobro,
+      required this.idCliente,
       this.nombre,
       this.noFactura,
       this.totalEfectivo,
@@ -45,7 +45,7 @@ class CobroItem {
 }
 
 class Cobros with ChangeNotifier {
-  CobroItem cobroActive;
+  late CobroItem cobroActive;
   List<CobroItem> _cobros = [];
   final String authToken;
   final String userId;

@@ -9,8 +9,8 @@ class CarrierOne with ChangeNotifier {
   bool isAgregate;
 
   CarrierOne({
-    @required this.id,
-    @required this.nombre,
+    required this.id,
+    required this.nombre,
     this.isAgregate = false,
   });
 

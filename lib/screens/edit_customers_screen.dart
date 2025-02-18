@@ -45,8 +45,8 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final customerId = ModalRoute.of(context).settings.arguments as String;
-      if (customerId != null) {
+      final customerId = ModalRoute.of(context)?.settings.arguments as String;
+      if (customerId != '') {
         Provider.of<Customers>(context).refreshCustomer(customerId).then((_) {
           setState(() {
             _editedcustomer = Provider.of<Customers>(context, listen: false)
@@ -80,16 +80,16 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
   }
 
   Future<void> _saveForm() async {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     setState(() {
       _isLoading = true;
     });
 
-    if (_editedcustomer.id != null) {
+    if (_editedcustomer.id != '') {
       await Provider.of<Customers>(context, listen: false)
           .updateCustomer(_editedcustomer.id, _editedcustomer);
       setState(() {
@@ -171,7 +171,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                         ),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Es requerido el campo';
                           }
                           return null;
@@ -179,7 +179,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                         onSaved: (value) {
                           _editedcustomer = CustomerOne(
                             id: _editedcustomer.id,
-                            nombre: value,
+                            nombre: value ?? '',
                             empresa: _editedcustomer.empresa,
                             telefono: _editedcustomer.telefono,
                             direccion: _editedcustomer.direccion,
@@ -199,7 +199,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                         ),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Es requerido el campo';
                           }
                           if (value.length < 5) {
@@ -211,7 +211,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                           _editedcustomer = CustomerOne(
                             id: _editedcustomer.id,
                             nombre: _editedcustomer.nombre,
-                            empresa: value,
+                            empresa: value ?? '',
                             telefono: _editedcustomer.telefono,
                             direccion: _editedcustomer.direccion,
                             code: _editedcustomer.code,
@@ -230,7 +230,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                         ),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Es requerido el campo';
                           }
                           if ((value.length < 9) || (value.length > 12)) {
@@ -246,7 +246,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                             id: _editedcustomer.id,
                             nombre: _editedcustomer.nombre,
                             empresa: _editedcustomer.empresa,
-                            telefono: value,
+                            telefono: value ?? '',
                             direccion: _editedcustomer.direccion,
                             code: _editedcustomer.code,
                             idLista: _editedcustomer.idLista,
@@ -264,7 +264,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                         ),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Es requerido el campo';
                           }
                           if (value.length < 5) {
@@ -278,7 +278,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                             nombre: _editedcustomer.nombre,
                             empresa: _editedcustomer.empresa,
                             telefono: _editedcustomer.telefono,
-                            direccion: value,
+                            direccion: value ?? '',
                             code: _editedcustomer.code,
                             idLista: _editedcustomer.idLista,
                             mail: _editedcustomer.mail,
@@ -296,7 +296,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                         ),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Es requerido el campo';
                           }
                           if (value.length < 3) {
@@ -311,7 +311,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                             empresa: _editedcustomer.empresa,
                             telefono: _editedcustomer.telefono,
                             direccion: _editedcustomer.direccion,
-                            code: value,
+                            code: value ?? '',
                             idLista: _editedcustomer.idLista,
                             mail: _editedcustomer.mail,
                           );
@@ -327,7 +327,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                         ),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Es requerido el campo';
                           }
                           if (value.length < 5) {
@@ -347,7 +347,7 @@ class _EditcustomerScreenState extends State<EditcustomerScreen> {
                             direccion: _editedcustomer.direccion,
                             code: _editedcustomer.code,
                             idLista: _editedcustomer.idLista,
-                            mail: value,
+                            mail: value ?? '',
                           );
                         },
                         onFieldSubmitted: (_) {

@@ -18,7 +18,7 @@ class RoutesScreen extends StatefulWidget {
 
 class _RoutesScreenState extends State<RoutesScreen> {
   var _searchName = "";
-  Future _routersFuture;
+  late Future _routersFuture;
   var _isLoading = false;
   var _isInit = true;
 

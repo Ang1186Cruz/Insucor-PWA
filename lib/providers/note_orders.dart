@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 import './cart.dart';
 
 class NoteOrderGrouped {
-  double importe;
-  DateTime fechaEntrega;
-  int cantidad;
+  double? importe;
+  DateTime? fechaEntrega;
+  int? cantidad;
   NoteOrderGrouped({this.importe, this.fechaEntrega, this.cantidad});
 
   factory NoteOrderGrouped.fromJson(Map<String, dynamic> parseJson) {
@@ -27,22 +27,22 @@ class NoteOrderItem {
   final String codigo;
   final String transportista;
   final String note;
-  int idTransportista;
-  DateTime fechaEntrega;
-  double importe;
+  int? idTransportista;
+  DateTime? fechaEntrega;
+  double? importe;
   final List<CartItem> products;
 
   NoteOrderItem(
-      {@required this.idNoteOrder,
-      @required this.nameCustommer,
-      this.nroPedido,
-      this.codigo,
-      this.transportista,
+      {required this.idNoteOrder,
+      required this.nameCustommer,
+      this.nroPedido = '',
+      this.codigo = '',
+      this.transportista = '',
       this.idTransportista,
       this.fechaEntrega,
-      this.note,
+      this.note = '',
       this.importe,
-      this.products});
+      this.products = const []});
   factory NoteOrderItem.fromJson(Map<String, dynamic> parseJson) {
     return NoteOrderItem(
       idNoteOrder: parseJson['idPedido'],
@@ -73,10 +73,10 @@ class NoteOrderItem {
 }
 
 class NoteOrders with ChangeNotifier {
-  NoteOrderItem orderActive;
+  late NoteOrderItem orderActive;
   List<NoteOrderItem> _noteOrders = [];
 
-  NoteOrderGrouped orderActiveGrouped;
+  late NoteOrderGrouped orderActiveGrouped;
   List<NoteOrderGrouped> _noteOrdersGrouped = [];
 
   final String authToken;

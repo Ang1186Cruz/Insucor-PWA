@@ -9,25 +9,16 @@ import './routes.dart';
 class DeliveryItem {
   final String idEntrega;
   final String nombre;
-  final DateTime fechaAlta;
-  final String estadoEntrega;
-  // final DateTime fecha;
-  // final String codigo;
-  // final String transportista;
-  // final String noCerrado;
-  // int idTransportista;
-  // DateTime fechaEntrega;
-  // String observacion;
-  // String modo;
-  // String telefono;
+  final DateTime? fechaAlta;
+  final String? estadoEntrega;
   final List<CartItem> products;
 
   DeliveryItem(
-      {@required this.idEntrega,
-      @required this.nombre,
+      {required this.idEntrega,
+      required this.nombre,
       this.fechaAlta,
       this.estadoEntrega,
-      this.products});
+      this.products = const []});
   factory DeliveryItem.fromJson(Map<String, dynamic> parseJson) {
     return DeliveryItem(
       idEntrega: parseJson['IdEntrega'],
@@ -49,10 +40,10 @@ class DeliveryItem {
 }
 
 class Deliverys with ChangeNotifier {
-  DeliveryItem deliveryActive;
+  DeliveryItem? deliveryActive;
   List<DeliveryItem> _deliverys = [];
-  final String authToken;
-  final String userId;
+  final String? authToken;
+  final String? userId;
 
   Deliverys(this.authToken, this.userId, this._deliverys);
 
@@ -63,7 +54,7 @@ class Deliverys with ChangeNotifier {
   Future<void> fetchAndSetDelivery() async {
     final url =
         'https://distribuidorainsucor.com/APP_Api/api/Entrega.php?idUser=' +
-            this.userId;
+            (this.userId ?? '0');
     try {
       final response = await http.get(Uri.parse(url));
       List<DeliveryItem> loadedCustomers = (json.decode(response.body) as List)

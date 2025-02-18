@@ -5,7 +5,7 @@ import '../../../constants.dart';
 
 class Chart extends StatelessWidget {
   const Chart({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

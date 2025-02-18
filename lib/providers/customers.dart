@@ -17,16 +17,16 @@ class CustomerOne with ChangeNotifier {
   List<String> facturadropdownItems;
 
   CustomerOne({
-    @required this.id,
-    @required this.nombre,
-    @required this.empresa,
-    this.telefono,
-    this.direccion,
-    this.code,
-    this.idLista,
-    this.mail,
+    required this.id,
+    required this.nombre,
+    required this.empresa,
+    this.telefono = '',
+    this.direccion = '',
+    this.code = '',
+    this.idLista = '',
+    this.mail = '',
     this.isAgregate = false,
-    this.facturadropdownItems,
+    this.facturadropdownItems = const [],
   });
 
   bool validarCliente() {
@@ -59,7 +59,7 @@ class CustomerOne with ChangeNotifier {
 }
 
 class Customers with ChangeNotifier {
-  CustomerOne customerActive;
+  CustomerOne? customerActive;
   final String authToken;
   final String userId;
   Customers(this.authToken, this.userId, this._items);

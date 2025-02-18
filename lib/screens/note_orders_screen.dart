@@ -18,7 +18,7 @@ class NoteOrdersScreen extends StatefulWidget {
 
 class _NoteOrdersScreenState extends State<NoteOrdersScreen> {
   var _searchName = "";
-  Future _ordersFuture;
+  late Future _ordersFuture;
 
   Future _obtainOrdersFuture() {
     return Provider.of<NoteOrders>(context, listen: false).fetchAndSetOrder();
@@ -62,8 +62,8 @@ class _NoteOrdersScreenState extends State<NoteOrdersScreen> {
                               Colors.white, // Color de fondo del ListTile
                           selectedTileColor: Colors.blue,
                           title: Text("(" +
-                              DateFormat("dd/MM/yyyy")
-                                  .format(order.fechaEntrega) +
+                              DateFormat("dd/MM/yyyy").format(
+                                  order.fechaEntrega ?? DateTime.now()) +
                               ")  (" +
                               NumberFormat.simpleCurrency()
                                   .format(order.importe) +
@@ -75,8 +75,9 @@ class _NoteOrdersScreenState extends State<NoteOrdersScreen> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => NoteOrdersDetailsScreen(
-                                    orderData
-                                        .NoteOrderGroupeds[index].fechaEntrega),
+                                    orderData.NoteOrderGroupeds[index]
+                                            .fechaEntrega ??
+                                        DateTime.now()),
                               ),
                             );
                           },

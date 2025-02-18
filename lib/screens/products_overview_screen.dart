@@ -48,7 +48,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         if (authData.operation == 'Productos') {
           stockProduct = true;
           Provider.of<Products>(context, listen: false)
-              .fetchAndSetProduct('3', null, '1')
+              .fetchAndSetProduct('3', {}, '1')
               .then((_) {
             setState(() {
               _isLoading = false;
@@ -60,13 +60,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         }
       } else {
         Provider.of<Customers>(context)
-            .refreshCustomer(customer.customerActive.id)
+            .refreshCustomer(customer.customerActive!.id)
             .then((_) {
           setState(() {
             customer.customerActive =
-                customer.findById(customer.customerActive.id);
-            if (customer.customerActive.validarCliente()) {
-              customer.customerActive.isAgregate = true;
+                customer.findById(customer.customerActive!.id);
+            if (customer.customerActive!.validarCliente()) {
+              customer.customerActive!.isAgregate = true;
 
               final card = Provider.of<Cart>(context, listen: false);
 
@@ -74,9 +74,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                   .fetchAndSetProduct(
                       (customer.customerActive == null)
                           ? '0'
-                          : customer.customerActive.idLista,
-                      (customer.customerActive == null) ? '0' : card.items,
-                      customer.customerActive.id)
+                          : customer.customerActive!.idLista,
+                      (customer.customerActive == null) ? {} : card.items,
+                      customer.customerActive!.id)
                   .then((_) {
                 setState(() {
                   _isLoading = false;
@@ -104,7 +104,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           actions: <Widget>[
             Consumer<Cart>(
               builder: (_, cartObject, child) => badges.Badge(
-                child: child,
+                child: child ?? SizedBox(),
                 value: cartObject.itemCount.toString(),
               ),
               child: IconButton(

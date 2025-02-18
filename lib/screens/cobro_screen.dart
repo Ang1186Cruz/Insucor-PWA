@@ -15,7 +15,7 @@ class CobrosScreen extends StatefulWidget {
 
 class _CobrosScreenState extends State<CobrosScreen> {
   var _searchName = "";
-  Future _cobrosFuture;
+  late Future _cobrosFuture;
 
   Future _obtainCobrosFuture() {
     return Provider.of<Cobros>(context, listen: false).fetchAndSetCobro();

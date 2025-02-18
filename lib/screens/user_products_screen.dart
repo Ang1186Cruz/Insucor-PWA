@@ -10,9 +10,10 @@ import 'package:flutter_shop_app/providers/customers.dart';
 class UserProductsScreen extends StatelessWidget {
   static const routeName = './user-products';
 
-
-  Future<void> _refreshProducts(BuildContext context, String search, String idLista, String idCliente) async {
-    await Provider.of<Products>(context, listen: false).fetchAndSetProduct(idLista,null,idCliente);
+  Future<void> _refreshProducts(BuildContext context, String search,
+      String idLista, String idCliente) async {
+    await Provider.of<Products>(context, listen: false)
+        .fetchAndSetProduct(idLista, {}, idCliente);
   }
 
   @override
@@ -21,11 +22,11 @@ class UserProductsScreen extends StatelessWidget {
     final customer = Provider.of<Customers>(context);
     return Scaffold(
         appBar: AppBar(
-           title: Text('Listado de Productos'),
+          title: Text('Listado de Productos'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: (){
+              onPressed: () {
                 Navigator.of(context).pushNamed(EditProductScreen.routeName);
               },
             )
@@ -33,34 +34,49 @@ class UserProductsScreen extends StatelessWidget {
         ),
         drawer: AppDrawer(),
         body: FutureBuilder(
-          future: _refreshProducts(context,"",(customer.customerActive==null)?'0':customer.customerActive.idLista,(customer.customerActive==null)?'0':customer.customerActive.id ),
+          future: _refreshProducts(
+              context,
+              "",
+              (customer.customerActive == null)
+                  ? '0'
+                  : customer.customerActive!.idLista,
+              (customer.customerActive == null)
+                  ? '0'
+                  : customer.customerActive!.id),
           builder: (ctx, snapshot) =>
-          snapshot.connectionState == ConnectionState.waiting ?
-          Center(child: CircularProgressIndicator(),) :
-          RefreshIndicator(
-            onRefresh: () => _refreshProducts(context,"",(customer.customerActive==null)?'0':customer.customerActive.idLista,(customer.customerActive==null)?'0':customer.customerActive.id ),
-            child: Consumer<Products>(
-              builder: (ctx, productsData, _) => Padding(
-                padding: EdgeInsets.all(8),
-                child: ListView.builder(
-                  itemBuilder: (_, index) => Column(
-                    children: <Widget>[
-                      UserProductItem(
-                        id: productsData.items[index].id,
-                        title: productsData.items[index].title,
-                        imageUrl: productsData.items[index].imageUrl,
+              snapshot.connectionState == ConnectionState.waiting
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () => _refreshProducts(
+                          context,
+                          "",
+                          (customer.customerActive == null)
+                              ? '0'
+                              : customer.customerActive!.idLista,
+                          (customer.customerActive == null)
+                              ? '0'
+                              : customer.customerActive!.id),
+                      child: Consumer<Products>(
+                        builder: (ctx, productsData, _) => Padding(
+                          padding: EdgeInsets.all(8),
+                          child: ListView.builder(
+                            itemBuilder: (_, index) => Column(
+                              children: <Widget>[
+                                UserProductItem(
+                                  id: productsData.items[index].id,
+                                  title: productsData.items[index].title,
+                                  imageUrl: productsData.items[index].imageUrl,
+                                ),
+                                Divider(),
+                              ],
+                            ),
+                            itemCount: productsData.items.length,
+                          ),
+                        ),
                       ),
-                      Divider(),
-                    ],
-                  ),
-                  itemCount: productsData.items.length,
-                ),
-              ),
-            ),
-          ),
-        )
-    );
+                    ),
+        ));
   }
-
-
 }

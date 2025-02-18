@@ -99,9 +99,9 @@ class _SpendScreenState extends State<SpendScreen> {
           disabledHint: Text(_tipoGasto),
           value: _tipoGasto,
           isExpanded: true,
-          onChanged: (value) {
+          onChanged: (String? value) {
             setState(() {
-              _tipoGasto = value;
+              _tipoGasto = value ?? '';
             });
           },
           items: <DropdownMenuItem<String>>[
@@ -133,9 +133,9 @@ class _SpendScreenState extends State<SpendScreen> {
                     disabledHint: Text(_vehiculo),
                     value: _vehiculo,
                     isExpanded: true,
-                    onChanged: (value) {
+                    onChanged: (String? value) {
                       setState(() {
-                        _vehiculo = value;
+                        _vehiculo = value ?? '';
                       });
                     },
                     items: <DropdownMenuItem<String>>[
@@ -245,9 +245,9 @@ class _SpendScreenState extends State<SpendScreen> {
                     disabledHint: Text(_motivos),
                     value: _motivos,
                     isExpanded: true,
-                    onChanged: (value) {
+                    onChanged: (String? value) {
                       setState(() {
-                        _motivos = value;
+                        _motivos = value ?? '';
                       });
                     },
                     items: <DropdownMenuItem<String>>[
@@ -368,7 +368,7 @@ class _SpendScreenState extends State<SpendScreen> {
       _motivos = "COMBUSTIBLE";
     }
 
-    if (keyForm.currentState.validate() && validarCampo) {
+    if (keyForm.currentState!.validate() && validarCampo) {
       Provider.of<Spends>(context, listen: false).addSpend(
         _tipoGasto,
         _motivos,

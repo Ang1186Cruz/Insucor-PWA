@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../providers/cobros.dart' as ord;
-
 
 class CobroItem extends StatefulWidget {
   final ord.CobroItem cobro;
@@ -22,11 +20,11 @@ class _CobroItemState extends State<CobroItem> {
   Widget build(BuildContext context) {
     bool search = true;
     if (!(widget.value.isEmpty || widget.value == "")) {
-      search = (widget.cobro.nombre
-              .toUpperCase()
-              .contains(widget.value.toUpperCase()));
+      search = (widget.cobro.nombre!
+          .toUpperCase()
+          .contains(widget.value.toUpperCase()));
     }
-   
+
     return search
         ? AnimatedContainer(
             duration: Duration(milliseconds: 400),
@@ -37,21 +35,21 @@ class _CobroItemState extends State<CobroItem> {
                 children: <Widget>[
                   ListTile(
                     title: Text(
-                       "(" +
-                        widget.cobro.noFactura +
-                        ") " +
-                        widget.cobro.nombre),
+                      "(${widget.cobro.noFactura ?? ''}) ${widget.cobro.nombre ?? ''}",
+                    ),
                     subtitle: Text("Fecha Cobro: " +
-                    DateFormat("dd/MM/yyyy")
-                             .format(widget.cobro.fechaCobro)+
-                "\nTotal Efectivo.: " +
-                NumberFormat.simpleCurrency().format(widget.cobro.totalEfectivo) +
-                "\nTotal Cheques: " +
-                NumberFormat.simpleCurrency().format(widget.cobro.totalCheque) +
-                "\nEntrega Total : " +
-                NumberFormat.simpleCurrency().format(widget.cobro.totalRecibido)),
-                
-                 ), 
+                        DateFormat("dd/MM/yyyy")
+                            .format(widget.cobro.fechaCobro ?? DateTime.now()) +
+                        "\nTotal Efectivo.: " +
+                        NumberFormat.simpleCurrency()
+                            .format(widget.cobro.totalEfectivo) +
+                        "\nTotal Cheques: " +
+                        NumberFormat.simpleCurrency()
+                            .format(widget.cobro.totalCheque) +
+                        "\nEntrega Total : " +
+                        NumberFormat.simpleCurrency()
+                            .format(widget.cobro.totalRecibido)),
+                  ),
                 ],
               ),
             ),
@@ -59,4 +57,3 @@ class _CobroItemState extends State<CobroItem> {
         : AnimatedContainer(duration: const Duration(seconds: 1));
   }
 }
-

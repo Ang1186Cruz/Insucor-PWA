@@ -16,7 +16,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   var _searchName = "";
-  Future _ordersFuture;
+  late Future _ordersFuture;
 
   Future _obtainOrdersFuture() {
     Provider.of<Customers>(context).refreshCustomer('0').then((_) {

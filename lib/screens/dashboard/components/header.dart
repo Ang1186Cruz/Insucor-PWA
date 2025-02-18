@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/providers/responsive.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../constants.dart';
 
 class Header extends StatelessWidget {
   const Header({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -14,10 +12,7 @@ class Header extends StatelessWidget {
     return Row(
       children: [
         if (!Responsive.isDesktop(context))
-          IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: null //context.read<MenuAppController>().controlMenu,
-              ),
+          IconButton(icon: Icon(Icons.menu), onPressed: null),
         if (!Responsive.isMobile(context))
           Text(
             "Dashboard",
@@ -34,7 +29,7 @@ class Header extends StatelessWidget {
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -71,7 +66,7 @@ class ProfileCard extends StatelessWidget {
 
 class SearchField extends StatelessWidget {
   const SearchField({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -94,7 +89,6 @@ class SearchField extends StatelessWidget {
               color: primaryColor,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
-            // child: SvgPicture.asset("assets/icons/Search.svg"),
           ),
         ),
       ),
