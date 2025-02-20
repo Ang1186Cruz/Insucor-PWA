@@ -1,9 +1,7 @@
 workflows:
   flutter-workflow:
     name: Flutter Workflow
-    max_build_duration: 60 # Duración máxima en minutos
-    instances:
-      - macos  # Especifica el tipo de instancia para el build (macos, linux, etc.)
+    max_build_duration: 60  # Duración máxima en minutos
     environment:
       flutter: stable  # Usa la versión estable de Flutter
     scripts:
@@ -19,11 +17,9 @@ workflows:
       - name: Build app for Android
         script: |
           flutter build apk --release
+      - name: Publish to Firebase (ejemplo)
+        script: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app <firebase-app-id>
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk # Define los archivos que quieres que Codemagic guarde como artefactos
       - build/ios/iphoneos/Runner.app # Ejemplo para iOS
-    publish:
-      scripts:
-        - name: Publish to Firebase App Distribution
-          script: |
-            firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app <firebase-app-id>
