@@ -33,12 +33,9 @@ import './providers/orders.dart';
 import './providers/products.dart';
 import './providers/deliverys.dart';
 import './providers/cobros.dart';
-import './providers/carrier.dart';
 import './screens/product_detail_screen.dart';
 import './screens/customers_screen.dart';
-import './screens/delivery_screen.dart';
 import './providers/routes.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());

@@ -15,6 +15,7 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
+    // Ensure the widget has settled.
     await tester.pumpAndSettle();
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
@@ -24,6 +25,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
+    await tester.pumpAndSettle();
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
