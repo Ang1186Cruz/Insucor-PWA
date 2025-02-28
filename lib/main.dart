@@ -117,8 +117,17 @@ class MyApp extends StatelessWidget {
       child: Consumer<Auth>(
         builder: (ctx, auth, _) {
           return MaterialApp(
-            localizationsDelegates: [GlobalMaterialLocalizations.delegate],
-            supportedLocales: [const Locale('es', 'ES')],
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate, // Esto es lo que quieres
+              GlobalWidgetsLocalizations
+                  .delegate, // Agrega este también si es necesario
+              GlobalCupertinoLocalizations
+                  .delegate, // Agrega este si usas Cupertino
+            ],
+            supportedLocales: [
+              const Locale('es', 'ES'),
+              const Locale('en', 'US'),
+            ],
             title: 'Mi Tienda',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(

@@ -61,7 +61,7 @@ class _RoutesItemState extends State<RoutesItem> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black)),
                     leading: CircleAvatar(
-                        radius: 30.0, child: Text(widget.routes.codCli ?? "")),
+                        radius: 30.0, child: Text(widget.routes.codCli)),
                     trailing: Wrap(
                       children: <Widget>[
                         IconButton(
