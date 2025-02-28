@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:js_util';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import './cart.dart';

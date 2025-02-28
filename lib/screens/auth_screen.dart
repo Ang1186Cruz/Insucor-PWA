@@ -287,7 +287,8 @@ class _AuthCardState extends State<AuthCard>
                   CircularProgressIndicator()
                 else
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.blue),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                     child:
                         //Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                         Text('LOGIN'),

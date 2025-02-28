@@ -64,7 +64,7 @@ class Cart with ChangeNotifier {
                 title: existingCartItem.title,
                 price: existingCartItem.price,
                 quantity: int.parse(quantity),
-                priceRequested: double.parse(priceRequested ?? '0'),
+                priceRequested: double.parse(priceRequested),
               ));
     } else {
       _items.putIfAbsent(
@@ -74,7 +74,7 @@ class Cart with ChangeNotifier {
                 title: title,
                 price: price,
                 quantity: int.parse(quantity),
-                priceRequested: double.parse(priceRequested ?? '0'),
+                priceRequested: double.parse(priceRequested),
               ));
     }
     notifyListeners();

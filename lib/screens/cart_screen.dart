@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/providers/carrier.dart';
 import 'package:flutter_shop_app/providers/customers.dart';
@@ -115,10 +114,7 @@ class _OrderButtonState extends State<OrderButton> {
     final today = DateTime.now();
     //
     if (isFirst) {
-      orderEnviar = order.getActivated() ??
-          new OrderItem(
-              idOrder: "0", nameCustommer: "", idTransportista: 1, modo: "A");
-      myControllerObservacion.text = orderEnviar.observacion;
+      orderEnviar = order.getActivated();
       isFirst = false;
     }
     //

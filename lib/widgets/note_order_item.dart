@@ -60,7 +60,7 @@ class _NotesOrderItemState extends State<NotesOrderItem> {
 
     for (var i = 0; i < widget.order.products.length; i++) {
       cantidadPrepa += widget.order.products[i].preparado ? 1 : 0;
-      cantidadContro += (widget.order.products[i].controlado ?? false) ? 1 : 0;
+      cantidadContro += (widget.order.products[i].controlado) ? 1 : 0;
       cantidadTotal += widget.order.products[i].quantity;
       montoTotal +=
           (widget.order.products[i].price * widget.order.products[i].quantity);

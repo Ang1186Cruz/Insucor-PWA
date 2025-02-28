@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -336,17 +333,16 @@ class _EntregaScreenState extends State<EntregaScreen> {
                                                             orderActivate
                                                                     .products[index]
                                                                     .quantity =
-                                                                int.parse(cantidadC
-                                                                        .text ??
-                                                                    '0');
+                                                                int.parse(
+                                                                    cantidadC
+                                                                        .text);
                                                             int.parse(
                                                                 cantidadC.text);
                                                             orderActivate
                                                                     .products[index]
                                                                     .descripcion =
                                                                 comentarioC
-                                                                        .text ??
-                                                                    '';
+                                                                    .text;
                                                             orderActivate
                                                                 .products[index]
                                                                 .motivo = _motivo;

@@ -45,8 +45,7 @@ class CustomerItem extends StatelessWidget {
                     customer.direccion,
                 style: TextStyle(
                     fontWeight: FontWeight.bold, color: Colors.black)),
-            leading:
-                CircleAvatar(radius: 30.0, child: Text(customer.code ?? '')),
+            leading: CircleAvatar(radius: 30.0, child: Text(customer.code)),
             trailing: Container(
                 //width: 80,
                 width: 100,
