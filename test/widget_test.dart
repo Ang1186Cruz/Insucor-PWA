@@ -16,7 +16,8 @@ void main() {
     await tester.pumpWidget(MyApp());
 
     // Ensure the widget has settled.
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(Duration(seconds: 5));
+    print(tester.element(find.byType(Text)).toString());
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
@@ -25,7 +26,8 @@ void main() {
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(Duration(seconds: 5));
+    print(tester.element(find.byType(Text)).toString());
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
