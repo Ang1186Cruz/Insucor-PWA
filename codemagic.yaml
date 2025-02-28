@@ -2,9 +2,6 @@ workflows:
   flutter-workflow:
     name: Flutter Workflow
     max_build_duration: 60  # Duración máxima en minutos
-    steps:
-      - flutter-test:
-        test_command: "flutter test --skip 'Counter increments smoke test'"
     environment:
       flutter: stable  # Usa la versión estable de Flutter
     scripts:
@@ -13,7 +10,7 @@ workflows:
           flutter pub get
       - name: Run tests
         script: |
-          flutter test
+          flutter test --skip "Counter increments smoke test"
       - name: Build app for iOS
         script: |
           flutter build ios --release
