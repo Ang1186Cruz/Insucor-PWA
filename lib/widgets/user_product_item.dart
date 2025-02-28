@@ -44,7 +44,7 @@ class UserProductItem extends StatelessWidget {
                   );
                 }
               },
-              color: Theme.of(context).errorColor,
+              color: Theme.of(context).colorScheme.error,
             )
           ],
         ),

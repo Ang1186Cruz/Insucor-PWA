@@ -244,7 +244,9 @@ class _EntregaScreenState extends State<EntregaScreen> {
                                 child: _isLoading
                                     ? Row(children: <Widget>[
                                         IconButton(
-                                          color: Theme.of(context).accentColor,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           icon: Icon(
                                             Icons.done,
                                             color: Colors.green,

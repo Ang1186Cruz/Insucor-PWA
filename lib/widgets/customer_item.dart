@@ -52,7 +52,7 @@ class CustomerItem extends StatelessWidget {
                 width: 100,
                 child: Row(children: <Widget>[
                   IconButton(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     icon: customer.isAgregate
                         ? Icon(
                             Icons.done_all,

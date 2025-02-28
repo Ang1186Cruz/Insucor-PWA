@@ -29,7 +29,7 @@ class CartItem extends StatelessWidget {
       key: ValueKey(id),
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Theme.of(context).errorColor,
+        color: Theme.of(context).colorScheme.error,
         child: Icon(
           Icons.delete,
           color: Colors.red,

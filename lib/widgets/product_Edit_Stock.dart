@@ -47,7 +47,7 @@ class ProductEditStock extends StatelessWidget {
                 product.nombreUsuario),
             leading: CircleAvatar(child: Text(product.id)),
             trailing: IconButton(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
               icon: Icon(Icons.edit_road),
               onPressed: () {
                 Alert(

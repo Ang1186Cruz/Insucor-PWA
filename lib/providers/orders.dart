@@ -137,7 +137,24 @@ class Orders with ChangeNotifier {
   }
 
   OrderItem getActivated() {
-    return orderActive ?? newObject();
+    return orderActive ??
+        OrderItem(
+          idOrder: '',
+          nameCustommer: '',
+          mailCustomer: '',
+          address: '',
+          fecha: null,
+          codigo: '',
+          transportista: '',
+          noCerrado: '',
+          idTransportista: 0,
+          fechaEntrega: null,
+          observacion: '',
+          modo: '',
+          telefono: '',
+          importe: 0.0,
+          products: [],
+        );
   }
 
   Future<void> addOrder(

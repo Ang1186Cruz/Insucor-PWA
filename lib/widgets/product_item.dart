@@ -43,7 +43,7 @@ class ProductItem extends StatelessWidget {
                 NumberFormat.simpleCurrency().format(product.price)),
             leading: CircleAvatar(child: Text(product.id)),
             trailing: IconButton(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
 
               icon: Icon(product.isAgregate ? Icons.done : Icons.shopping_cart),
               // onPressed: (product.isAgregate || cart.nombreCustommer ==null )
