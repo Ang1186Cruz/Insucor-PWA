@@ -32,6 +32,8 @@ class _CollectScreenState extends State<CollectScreen> {
   }
 
   GlobalKey<FormState> keyForm = new GlobalKey();
+  TextEditingController eveinteMil = new TextEditingController();
+  TextEditingController ediezMil = new TextEditingController();
   TextEditingController edosMil = new TextEditingController();
   TextEditingController eMil = new TextEditingController();
   TextEditingController eQuinientos = new TextEditingController();
@@ -54,6 +56,7 @@ class _CollectScreenState extends State<CollectScreen> {
   TextEditingController importe6 = new TextEditingController();
   TextEditingController comentario = new TextEditingController();
 
+  TextEditingController iDolar = new TextEditingController();
   TextEditingController iRecibido = new TextEditingController();
   TextEditingController tEfectivo = new TextEditingController();
   TextEditingController tCheque = new TextEditingController();
@@ -196,6 +199,17 @@ class _CollectScreenState extends State<CollectScreen> {
     return Column(
       children: <Widget>[
         formItemsDesign(TextFormField(
+            decoration: InputDecoration(labelText: "Importe en Dolar"),
+            controller: iDolar,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            onChanged: (String value) {
+              setState(() {
+                recalcularEfectivo();
+              });
+            })),
+        formItemsDesign(TextFormField(
             decoration: InputDecoration(labelText: "Importe Recibido"),
             controller: iRecibido,
             inputFormatters: <TextInputFormatter>[
@@ -261,6 +275,30 @@ class _CollectScreenState extends State<CollectScreen> {
   Widget formEfectivo() {
     return Column(
       children: <Widget>[
+        TextField(
+            decoration: InputDecoration(labelText: "\$ 20000"),
+            controller: eveinteMil,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            onChanged: (String value) {
+              setState(() {
+                recalcularEfectivo();
+              });
+            }),
+        TextField(
+            decoration: InputDecoration(labelText: "\$ 10000"),
+            controller: ediezMil,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            onChanged: (String value) {
+              setState(() {
+                recalcularEfectivo();
+              });
+            }),
         TextField(
             decoration: InputDecoration(labelText: "\$ 2000"),
             controller: edosMil,
@@ -402,8 +440,11 @@ class _CollectScreenState extends State<CollectScreen> {
     if (iRecibido.text.isNotEmpty && iRecibido.text != '0') {
       tEfectivo.text = iRecibido.text;
     } else {
-      tEfectivo.text = (int.parse(edosMil.text.isEmpty ? '0' : edosMil.text) *
-                  2000 +
+      tEfectivo
+          .text = (int.parse(eveinteMil.text.isEmpty ? '0' : eveinteMil.text) *
+                  20000 +
+              int.parse(ediezMil.text.isEmpty ? '0' : ediezMil.text) * 10000 +
+              int.parse(edosMil.text.isEmpty ? '0' : edosMil.text) * 2000 +
               int.parse(eMil.text.isEmpty ? '0' : eMil.text) * 1000 +
               int.parse(eQuinientos.text.isEmpty ? '0' : eQuinientos.text) *
                   500 +
@@ -450,6 +491,8 @@ class _CollectScreenState extends State<CollectScreen> {
     String numeroFact = listNum[0];
     if (keyForm.currentState!.validate() && numeroFact != '') {
       if (iRecibido.text.isNotEmpty && iRecibido.text != '0') {
+        eveinteMil.text = '0';
+        ediezMil.text = '0';
         edosMil.text = '0';
         eMil.text = '0';
         eQuinientos.text = '0';
@@ -462,6 +505,8 @@ class _CollectScreenState extends State<CollectScreen> {
       Provider.of<Cobros>(context, listen: false).addCobro(
           customer.customerActive!.id,
           numeroFact,
+          eveinteMil.text,
+          ediezMil.text,
           edosMil.text,
           eMil.text,
           eQuinientos.text,
@@ -483,6 +528,7 @@ class _CollectScreenState extends State<CollectScreen> {
           numero6.text,
           importe6.text,
           comentario.text,
+          iDolar.text,
           iRecibido.text,
           tEfectivo.text,
           tCheque.text,

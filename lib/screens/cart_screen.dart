@@ -319,6 +319,24 @@ class _OrderButtonState extends State<OrderButton> {
                                 isUserNameValidate = true;
                                 _isLoading = true;
                               });
+                              Alert(
+                                context: context,
+                                type: AlertType.error,
+                                title: "Error",
+                                desc:
+                                    "Debe ingresar una fecha antes de continuar.",
+                                buttons: [
+                                  DialogButton(
+                                    child: Text(
+                                      "Aceptar",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                    width: 120,
+                                  )
+                                ],
+                              ).show();
                             }
                           } else {
                             return null;

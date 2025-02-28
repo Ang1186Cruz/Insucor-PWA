@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shop_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
+import '../providers/carrier.dart';
 import '../providers/customers.dart';
 import '../providers/orders.dart' show Orders;
 import '../widgets/order_item.dart';
@@ -20,6 +21,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Future _obtainOrdersFuture() {
     Provider.of<Customers>(context).refreshCustomer('0').then((_) {
+      setState(() {});
+    });
+    Provider.of<Carriers>(context).fetchAndSetCarrier().then((_) {
       setState(() {});
     });
 

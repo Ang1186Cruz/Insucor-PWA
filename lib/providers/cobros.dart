@@ -76,6 +76,8 @@ class Cobros with ChangeNotifier {
   Future<void> addCobro(
       String idCliente,
       String numFactura,
+      String eveinteMil,
+      String ediezMil,
       String edosMil,
       String eMil,
       String eQuinientos,
@@ -97,6 +99,7 @@ class Cobros with ChangeNotifier {
       String numero6,
       String importe6,
       String comentario,
+      String iDolar,
       String iRecibido,
       String tEfectivo,
       String tCheque,
@@ -129,6 +132,8 @@ class Cobros with ChangeNotifier {
           'idCliente': idCliente,
           'idUser': this.userId,
           'numFactura': numFactura,
+          'eveinteMil': int.parse((eveinteMil == '') ? '0' : eveinteMil),
+          'ediezMil': int.parse((ediezMil == '') ? '0' : ediezMil),
           'edosMil': int.parse((edosMil == '') ? '0' : edosMil),
           'eMil': int.parse((eMil == '') ? '0' : eMil),
           'eQuinientos': int.parse((eQuinientos == '') ? '0' : eQuinientos),
@@ -144,6 +149,7 @@ class Cobros with ChangeNotifier {
                   })
               .toList(),
           'comentario': comentario,
+          'iDolar': double.parse((iDolar == '') ? '0' : iDolar),
           'iRecibido': double.parse((iRecibido == '') ? '0' : iRecibido),
           'tEfectivo': double.parse((tEfectivo == '') ? '0' : tEfectivo),
           'tCheque': double.parse((tCheque == '') ? '0' : tCheque),
